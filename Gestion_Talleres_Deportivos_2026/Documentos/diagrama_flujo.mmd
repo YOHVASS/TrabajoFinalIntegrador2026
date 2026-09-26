@@ -1,0 +1,20 @@
+flowchart LR
+    Inicio((Inicio)) --> A[Preinscripción<br>online]
+    A --> B[Revisión<br>administrativa]
+    B --> B1{¿Se aprueba<br>la preinscripción?}
+    B1 -- No --> B2[Preinscripción<br>rechazada]
+    B2 --> Fin1((Fin))
+    B1 -- Sí --> C[Registro de<br>documentación]
+    C --> D[Registro de<br>seguro anual]
+    D --> E[Control de<br>apto médico]
+    E --> F{¿Cumple<br>requisitos?}
+    F -- Sí --> G[Asignación<br>al taller]
+    F -- No --> H[Alerta de<br>pendiente/vencido]
+    H -- corrige --> C
+    G --> I[Control de<br>ingreso QR/DNI]
+    I --> J{¿Habilitado?}
+    J -- No --> K[Se deniega el ingreso y<br>se registra Asistencia<br>con resultado RECHAZADO]
+    J -- Sí --> L[Registro de<br>asistencia HABILITADO]
+    K --> Fin((Fin))
+    L --> M[Información<br>para gestión]
+    M --> Fin
