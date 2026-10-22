@@ -1,0 +1,110 @@
+%% DER del Sistema Web de Gestión de Talleres Deportivos (UNJu).
+%% La figura muestra claves primarias, foráneas y claves únicas.
+%% Los atributos restantes, los CHECK y los índices únicos parciales están en el diccionario (sección 6.2).
+erDiagram
+    Rol ||--o{ UsuarioSistema : "1:N"
+    UsuarioSistema ||--o| Profesor : "1:1 opcional"
+    UsuarioSistema ||--o| Ayudante : "1:1 opcional"
+    UsuarioSistema ||--o{ Noticia : "1:N publica"
+    UsuarioSistema ||--o{ Asistencia : "1:N registra"
+    Disciplina ||--o{ Taller : "1:N"
+    Profesor ||--o{ Taller : "1:N"
+    Periodo ||--o{ Taller : "1:N"
+    Periodo ||--o{ Seguro : "1:N"
+    Taller ||--o{ HorarioTaller : "1:N"
+    Taller ||--o{ TallerAyudante : "1:N"
+    Ayudante ||--o{ TallerAyudante : "1:N"
+    Taller ||--o{ Preinscripcion : "1:N"
+    Taller ||--o{ Inscripcion : "1:N"
+    Taller ||--o{ Asistencia : "1:N"
+    Participante ||--o{ Preinscripcion : "1:N"
+    Participante ||--o{ Inscripcion : "1:N"
+    Participante ||--o{ Asistencia : "1:N"
+    Participante ||--o{ Documentacion : "1:N"
+    Participante ||--o{ Seguro : "1:N"
+    Participante ||--o{ AptoMedico : "1:N"
+    Participante ||--o{ Alerta : "1:N"
+    TipoDocumento ||--o{ Documentacion : "1:N"
+    Preinscripcion ||--o| Inscripcion : "1:1 opcional"
+
+    Rol {
+        bigint id_rol PK
+    }
+    UsuarioSistema {
+        bigint id_usuario PK
+        bigint id_rol FK
+    }
+    Noticia {
+        bigint id_noticia PK
+        bigint id_usuario FK
+    }
+    Disciplina {
+        bigint id_disciplina PK
+    }
+    Periodo {
+        bigint id_periodo PK
+    }
+    Profesor {
+        bigint id_profesor PK
+        bigint id_usuario FK
+    }
+    Ayudante {
+        bigint id_ayudante PK
+        bigint id_usuario FK
+    }
+    Taller {
+        bigint id_taller PK
+        bigint id_disciplina FK
+        bigint id_profesor FK
+        bigint id_periodo FK
+    }
+    HorarioTaller {
+        bigint id_horario PK
+        bigint id_taller FK
+    }
+    TallerAyudante {
+        bigint id_taller PK
+        bigint id_ayudante PK
+    }
+    Participante {
+        bigint id_participante PK
+        varchar qr_code UK
+    }
+    TipoDocumento {
+        bigint id_tipo_documento PK
+    }
+    Documentacion {
+        bigint id_documentacion PK
+        bigint id_participante FK
+        bigint id_tipo_documento FK
+    }
+    Seguro {
+        bigint id_seguro PK
+        bigint id_participante FK
+        bigint id_periodo FK
+    }
+    AptoMedico {
+        bigint id_apto_medico PK
+        bigint id_participante FK
+    }
+    Alerta {
+        bigint id_alerta PK
+        bigint id_participante FK
+    }
+    Preinscripcion {
+        bigint id_preinscripcion PK
+        bigint id_participante FK
+        bigint id_taller FK
+    }
+    Inscripcion {
+        bigint id_inscripcion PK
+        bigint id_participante FK
+        bigint id_taller FK
+        bigint id_preinscripcion FK "UNIQUE"
+    }
+    Asistencia {
+        bigint id_asistencia PK
+        bigint id_participante FK
+        bigint id_taller FK
+        bigint id_usuario_registro FK
+    }
