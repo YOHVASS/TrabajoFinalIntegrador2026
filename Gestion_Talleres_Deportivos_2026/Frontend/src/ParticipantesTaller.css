@@ -1,0 +1,691 @@
+
+/* =========================================================
+   PARTICIPANTES POR TALLER
+   Diseño general
+========================================================= */
+
+.participantes-taller-container {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 28px 32px 40px;
+    box-sizing: border-box;
+    color: #1e293b;
+}
+
+/* =========================================================
+   ENCABEZADO
+========================================================= */
+
+.participantes-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 28px;
+}
+
+.participantes-header > div:first-child {
+    min-width: 0;
+}
+
+.participantes-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+}
+
+.participantes-header h1 {
+    margin: 0;
+    color: #172554;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.participantes-header p {
+    margin: 10px 0 0;
+    color: #64748b;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.participantes-header-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 62px;
+    height: 62px;
+    border-radius: 18px;
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+/* =========================================================
+   SELECTOR DE TALLER
+========================================================= */
+
+.participantes-selector-card {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 22px 24px;
+    margin-bottom: 22px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+}
+
+.participantes-selector-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #2563eb;
+}
+
+.participantes-selector-heading > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.participantes-selector-heading strong {
+    color: #1e293b;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.participantes-selector-heading span {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.participantes-selector-card select,
+.participantes-filters select {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 14px;
+    color: #334155;
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    outline: none;
+    font-family: inherit;
+    font-size: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.participantes-selector-card select:focus,
+.participantes-filters select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+.participantes-selector-card select:disabled {
+    background: #f8fafc;
+    color: #94a3b8;
+    cursor: not-allowed;
+}
+
+/* =========================================================
+   MENSAJES DE ERROR Y ESTADOS VACÍOS
+========================================================= */
+
+.participantes-error {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 18px;
+    margin-bottom: 22px;
+    color: #991b1b;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.participantes-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 230px;
+    padding: 35px 24px;
+    color: #64748b;
+    background: #ffffff;
+    border: 1px dashed #cbd5e1;
+    border-radius: 16px;
+    text-align: center;
+}
+
+.participantes-empty > svg {
+    color: #94a3b8;
+}
+
+.participantes-empty h3 {
+    margin: 0;
+    color: #334155;
+    font-size: 18px;
+}
+
+.participantes-empty p {
+    max-width: 440px;
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* =========================================================
+   TARJETAS DE RESUMEN
+========================================================= */
+
+.participantes-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.participantes-summary-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+    padding: 20px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 15px;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.participantes-summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 18px rgba(15, 23, 42, 0.07);
+}
+
+.participantes-summary-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+}
+
+.participantes-summary-icon.blue {
+    color: #2563eb;
+    background: #eff6ff;
+}
+
+.participantes-summary-icon.green {
+    color: #15803d;
+    background: #f0fdf4;
+}
+
+.participantes-summary-icon.orange {
+    color: #c2410c;
+    background: #fff7ed;
+}
+
+.participantes-summary-icon.red {
+    color: #dc2626;
+    background: #fef2f2;
+}
+
+.participantes-summary-card > div:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.participantes-summary-card span {
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.participantes-summary-card strong {
+    color: #172554;
+    font-size: 25px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+/* =========================================================
+   CONTENEDOR DEL LISTADO
+========================================================= */
+
+.participantes-list-card {
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+}
+
+.participantes-list-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 24px 25px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.participantes-list-heading h2 {
+    margin: 0;
+    color: #172554;
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.participantes-list-heading p {
+    margin: 7px 0 0;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.participantes-count {
+    flex-shrink: 0;
+    padding: 8px 13px;
+    color: #1d4ed8;
+    background: #eff6ff;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   BUSCADOR Y FILTROS
+========================================================= */
+
+.participantes-filters {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px 25px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.participantes-search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+    min-height: 44px;
+    padding: 0 13px;
+    color: #94a3b8;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.participantes-search:focus-within {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+.participantes-search input {
+    width: 100%;
+    min-width: 0;
+    padding: 10px 0;
+    color: #334155;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.participantes-search input::placeholder {
+    color: #94a3b8;
+}
+
+.participantes-filters select {
+    width: 210px;
+    flex-shrink: 0;
+}
+
+/* =========================================================
+   TABLA
+========================================================= */
+
+.participantes-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.participantes-table {
+    width: 100%;
+    min-width: 680px;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.participantes-table thead {
+    background: #f8fafc;
+}
+
+.participantes-table th {
+    padding: 15px 22px;
+    color: #64748b;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.7px;
+    white-space: nowrap;
+}
+
+.participantes-table td {
+    padding: 16px 22px;
+    color: #475569;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+.participantes-table tbody tr {
+    transition: background-color 0.15s;
+}
+
+.participantes-table tbody tr:hover {
+    background: #f8fbff;
+}
+
+.participantes-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* =========================================================
+   DATOS DEL PARTICIPANTE
+========================================================= */
+
+.participantes-person {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 210px;
+}
+
+.participantes-person img,
+.participantes-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+}
+
+.participantes-person img {
+    object-fit: cover;
+    border: 1px solid #e2e8f0;
+}
+
+.participantes-avatar {
+    color: #1d4ed8;
+    background: #dbeafe;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.participantes-person > div:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.participantes-person strong {
+    color: #1e293b;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.participantes-person small {
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+/* =========================================================
+   ESTADOS
+========================================================= */
+
+.participantes-enrollment-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    color: #475569;
+    background: #f1f5f9;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.participantes-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 11px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.participantes-status-enabled {
+    color: #15803d;
+    background: #dcfce7;
+}
+
+.participantes-status-pending {
+    color: #b45309;
+    background: #fef3c7;
+}
+
+.participantes-status-disabled {
+    color: #b91c1c;
+    background: #fee2e2;
+}
+
+/* =========================================================
+   FILAS VACÍAS Y CARGA
+========================================================= */
+
+.participantes-empty-cell {
+    height: 150px;
+    color: #94a3b8 !important;
+    text-align: center !important;
+    vertical-align: middle;
+}
+
+.participantes-empty-cell svg {
+    display: block;
+    margin: 0 auto 10px;
+    color: #94a3b8;
+}
+
+.participantes-empty-cell span {
+    display: inline-block;
+}
+
+.participantes-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 260px;
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.participantes-spinner {
+    color: #2563eb;
+    animation: participantes-spin 1s linear infinite;
+}
+
+@keyframes participantes-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* =========================================================
+   PIE DEL LISTADO
+========================================================= */
+
+.participantes-footer {
+    padding: 16px 25px;
+    color: #64748b;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    font-size: 12px;
+}
+
+/* =========================================================
+   RESPONSIVE - TABLETS
+========================================================= */
+
+@media (max-width: 1024px) {
+    .participantes-taller-container {
+        padding: 24px;
+    }
+
+    .participantes-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .participantes-summary-card {
+        padding: 17px;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE - CELULARES
+========================================================= */
+
+@media (max-width: 640px) {
+    .participantes-taller-container {
+        padding: 18px 14px 30px;
+    }
+
+    .participantes-header {
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 22px;
+    }
+
+    .participantes-header h1 {
+        font-size: 23px;
+    }
+
+    .participantes-header p {
+        font-size: 13px;
+    }
+
+    .participantes-header-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 13px;
+    }
+
+    .participantes-header-icon svg {
+        width: 23px;
+        height: 23px;
+    }
+
+    .participantes-selector-card {
+        padding: 18px;
+    }
+
+    .participantes-selector-heading span {
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .participantes-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-bottom: 18px;
+    }
+
+    .participantes-summary-card {
+        gap: 10px;
+        padding: 13px 11px;
+    }
+
+    .participantes-summary-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+    }
+
+    .participantes-summary-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .participantes-summary-card span {
+        font-size: 10px;
+    }
+
+    .participantes-summary-card strong {
+        font-size: 21px;
+    }
+
+    .participantes-list-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 19px;
+    }
+
+    .participantes-list-heading h2 {
+        font-size: 17px;
+    }
+
+    .participantes-filters {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 16px;
+    }
+
+    .participantes-filters select {
+        width: 100%;
+    }
+
+    .participantes-table {
+        min-width: 650px;
+    }
+
+    .participantes-table th,
+    .participantes-table td {
+        padding: 13px 15px;
+    }
+
+    .participantes-footer {
+        padding: 14px 16px;
+        font-size: 11px;
+    }
+}

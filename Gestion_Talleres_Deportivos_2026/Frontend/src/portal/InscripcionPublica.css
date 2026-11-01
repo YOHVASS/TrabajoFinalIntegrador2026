@@ -1,0 +1,231 @@
+
+.inscripcion-publica {
+    min-height: 100vh;
+    background: #f5f7fb;
+    color: #17243b;
+}
+
+.inscripcion-header {
+    height: 76px;
+    padding: 0 8%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    border-bottom: 1px solid #e7ebf2;
+}
+
+.inscripcion-header strong {
+    color: #173d78;
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.inscripcion-volver {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #52627a;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.inscripcion-volver:hover {
+    color: #1764b0;
+}
+
+.inscripcion-main {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 55px 22px 85px;
+}
+
+.inscripcion-intro {
+    margin-bottom: 35px;
+    text-align: center;
+}
+
+.inscripcion-intro > span {
+    color: #2874c6;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.inscripcion-intro h1 {
+    margin: 13px 0;
+    color: #173d78;
+    font-size: clamp(32px, 5vw, 44px);
+    font-weight: 800;
+}
+
+.inscripcion-intro p {
+    color: #68778c;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.inscripcion-formulario {
+    padding: 38px;
+    background: #ffffff;
+    border: 1px solid #e8edf4;
+    border-radius: 17px;
+    box-shadow: 0 8px 28px rgba(24, 48, 82, 0.05);
+}
+
+.inscripcion-formulario h2 {
+    margin: 25px 0 22px;
+    padding-bottom: 12px;
+    color: #173d78;
+    border-bottom: 1px solid #e8edf4;
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.inscripcion-formulario h2:first-child {
+    margin-top: 0;
+}
+
+.inscripcion-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 19px;
+}
+
+.inscripcion-campo label {
+    color: #34445c;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.inscripcion-campo input,
+.inscripcion-campo select {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 46px;
+    padding: 12px 14px;
+    color: #34445c;
+    background: #fbfcfe;
+    border: 1px solid #dce4ef;
+    border-radius: 9px;
+    outline: none;
+    font-family: inherit;
+    font-size: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.inscripcion-campo input:focus,
+.inscripcion-campo select:focus {
+    border-color: #2874c6;
+    box-shadow: 0 0 0 3px rgba(40, 116, 198, 0.10);
+}
+
+.inscripcion-campos-dobles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.inscripcion-nota {
+    margin: 22px 0;
+    padding: 14px 16px;
+    color: #64748b;
+    background: #f2f6fc;
+    border-radius: 9px;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.inscripcion-error {
+    padding: 13px 15px;
+    color: #b42318;
+    background: #fff1f0;
+    border: 1px solid #ffd6d2;
+    border-radius: 9px;
+    font-size: 13px;
+}
+
+.inscripcion-boton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 48px;
+    padding: 13px 20px;
+    color: #ffffff;
+    background: #1764b0;
+    border: none;
+    border-radius: 9px;
+    text-decoration: none;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.inscripcion-boton:hover {
+    background: #104b8a;
+}
+
+.inscripcion-boton:disabled {
+    background: #9aabc0;
+    cursor: not-allowed;
+}
+
+.inscripcion-confirmacion {
+    padding: 45px 35px;
+    text-align: center;
+    background: #ffffff;
+    border: 1px solid #e8edf4;
+    border-radius: 17px;
+    box-shadow: 0 8px 28px rgba(24, 48, 82, 0.05);
+}
+
+.inscripcion-confirmacion > svg {
+    color: #219653;
+}
+
+.inscripcion-confirmacion h2 {
+    color: #173d78;
+    font-size: 25px;
+}
+
+.inscripcion-confirmacion p {
+    color: #64748b;
+    line-height: 1.7;
+}
+
+.inscripcion-confirmacion .inscripcion-boton {
+    max-width: 300px;
+    margin: 25px auto 0;
+}
+
+@media (max-width: 600px) {
+    .inscripcion-header {
+        padding: 0 18px;
+    }
+
+    .inscripcion-header strong {
+        font-size: 17px;
+    }
+
+    .inscripcion-volver {
+        font-size: 12px;
+    }
+
+    .inscripcion-main {
+        padding: 40px 15px 60px;
+    }
+
+    .inscripcion-formulario {
+        padding: 23px 18px;
+    }
+
+    .inscripcion-campos-dobles {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
