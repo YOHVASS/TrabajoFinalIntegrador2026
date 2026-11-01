@@ -1,0 +1,21 @@
+# Configuración local y secretos
+.env
+.env.*
+!.env.example
+
+# Archivos compilados
+target/
+
+# Archivos subidos por los usuarios
+uploads/
+
+# IDE y editor
+.idea/
+.vscode/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

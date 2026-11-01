@@ -1,0 +1,66 @@
+server:
+  port: ${PORT:8080}
+  error:
+    include-message: always
+
+spring:
+  application:
+    name: talleres-backend
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/talleres}
+    username: ${DB_USER:talleres}
+    password: ${DB_PASSWORD:talleres}
+    hikari:
+      # Los planes gratuitos de PostgreSQL limitan las conexiones (sección 1.5 del diseño).
+      maximum-pool-size: ${DB_POOL_SIZE:5}
+  jpa:
+    # El esquema lo crea Flyway (src/main/resources/db/migration). Hibernate no lo modifica.
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  jackson:
+    time-zone: ${APP_ZONA_HORARIA:America/Argentina/Jujuy}
+    serialization:
+      write-dates-as-timestamps: false
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 6MB
+
+app:
+  zona-horaria: ${APP_ZONA_HORARIA:America/Argentina/Jujuy}
+  jwt:
+    # En producción definir JWT_SECRET con al menos 32 caracteres aleatorios.
+    secret: ${JWT_SECRET:cambiar-este-secreto-en-produccion-por-uno-de-32+caracteres}
+    expiracion-minutos: ${JWT_EXPIRACION_MINUTOS:480}
+  cors:
+    # Orígenes permitidos separados por coma (frontend local de Vite y el de Vercel).
+    origenes: ${FRONTEND_URL:http://localhost:5173,http://localhost:3000}
+  archivos:
+    directorio: ${UPLOAD_DIR:./uploads}
+  alertas:
+    # Días de anticipación para avisar sobre apto médico y seguro próximos a vencer (RF-09).
+    dias-anticipacion: ${ALERTAS_DIAS_ANTICIPACION:30}
+  tareas:
+    # Recalcula vencimientos, habilitación y alertas todos los días a las 00:05.
+    cron-vencimientos: ${CRON_VENCIMIENTOS:0 5 0 * * *}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+    tags-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+
+---
+# Perfil "demo": agrega datos de ejemplo para desarrollar el frontend.
+spring:
+  config:
+    activate:
+      on-profile: demo
+  flyway:
+    locations: classpath:db/migration,classpath:db/demo
