@@ -16,7 +16,7 @@ import {
     Clock,
     X,
 } from "lucide-react";
-import { api } from "./services/api";
+import { api, API_BASE_URL, API_URL } from "./services/api";
 import type { Participante, PaginaResponse } from "./types";
 import "./Documentacion.css";
 
@@ -39,7 +39,7 @@ type Documento = {
     estado: "VIGENTE" | "VENCIDO" | "PENDIENTE";
 };
 
-const API_URL = "http://localhost:8080/api";
+
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const EXTENSIONES_PERMITIDAS = ["pdf", "jpg", "jpeg", "png", "webp"];
 
@@ -315,7 +315,7 @@ function Documentacion() {
             const token = localStorage.getItem("token");
 
             const respuesta = await fetch(
-                `http://localhost:8080${documento.archivoUrl}`,
+                `${API_BASE_URL}${documento.archivoUrl}`,
                 {
                     headers: token
                         ? { Authorization: `Bearer ${token}` }
@@ -356,7 +356,7 @@ function Documentacion() {
             const token = localStorage.getItem("token");
 
             const respuesta = await fetch(
-                `http://localhost:8080${documento.archivoUrl}`,
+                `${API_BASE_URL}${documento.archivoUrl}`,
                 {
                     headers: token
                         ? { Authorization: `Bearer ${token}` }

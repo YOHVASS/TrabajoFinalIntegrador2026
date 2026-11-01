@@ -15,7 +15,7 @@ import {
     Pencil,
     Trash2,
 } from "lucide-react";
-import { api } from "./services/api";
+import { api, API_BASE_URL, API_URL } from "./services/api";
 import type { Participante, PaginaResponse } from "./types";
 import "./SegurosAptos.css";
 
@@ -198,7 +198,7 @@ function SegurosAptos() {
 
         try {
             const token = localStorage.getItem("token");
-            const respuesta = await fetch(`http://localhost:8080${url}`, {
+            const respuesta = await fetch(`${API_BASE_URL}${url}`, {
                 headers: token ? { Authorization: `Bearer ${token}` } : {},
             });
 
@@ -218,7 +218,7 @@ function SegurosAptos() {
             const token = localStorage.getItem("token");
             const query = periodoFiltro ? `?idPeriodo=${periodoFiltro}` : "";
             const respuesta = await fetch(
-                `http://localhost:8080/api/seguros/altas-pendientes/csv${query}`,
+                `${API_URL}/seguros/altas-pendientes/csv${query}`,
                 { headers: token ? { Authorization: `Bearer ${token}` } : {} }
             );
 
@@ -482,7 +482,7 @@ function SegurosAptos() {
                 const token = localStorage.getItem("token");
 
                 const respuestaArchivo = await fetch(
-                    "http://localhost:8080/api/archivos",
+                    `${API_URL}/archivos`,
                     {
                         method: "POST",
                         headers: token
