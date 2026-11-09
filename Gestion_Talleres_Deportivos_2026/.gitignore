@@ -28,3 +28,7 @@ yarn-error.log*
 Thumbs.db
 .vscode/
 *.log
+
+# Archivos de Windows
+Desktop.ini
+*.lnk
