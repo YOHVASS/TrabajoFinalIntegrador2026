@@ -37,8 +37,8 @@ app:
     secret: ${JWT_SECRET:cambiar-este-secreto-en-produccion-por-uno-de-32+caracteres}
     expiracion-minutos: ${JWT_EXPIRACION_MINUTOS:480}
   cors:
-    # Orígenes permitidos separados por coma (frontend local de Vite y el de Vercel).
-    origenes: ${FRONTEND_URL:http://localhost:5173,http://localhost:3000}
+    # Orígenes permitidos separados por coma. FRONTEND_URL, si está definida, reemplaza esta lista.
+    origenes: ${FRONTEND_URL:http://localhost:5173,http://localhost:3000,https://trabajo-final-integrador2026.vercel.app,https://trabajo-final-integrador2026-4g8q.vercel.app}
   archivos:
     directorio: ${UPLOAD_DIR:./uploads}
   alertas:
