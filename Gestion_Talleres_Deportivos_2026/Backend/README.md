@@ -70,13 +70,26 @@ La matriz de permisos está centralizada en `Permisos.java`. `ADMIN_SISTEMA` adm
 
 ## Pruebas
 
+Desde esta carpeta:
+
 ```bash
 mvn test
 ```
 
-Incluye pruebas unitarias de:
-- habilitación (RN-05 / RN-04): `EvaluadorHabilitacionTest`
-- cupo y lista de espera (RN-13): `CupoServiceTest`
+Con Java 17 en `JAVA_HOME` si hay varias versiones instaladas.
+
+### Qué cubren
+
+| Clase | Reglas / RF | Casos principales |
+| --- | --- | --- |
+| `EvaluadorHabilitacionTest` | RN-04, RN-05 (RF-08) | Habilitado, pendiente, apto/seguro/constancia vencidos |
+| `CupoServiceTest` | RN-13 | Cupo libre/lleno, promoción desde lista de espera |
+| `IngresoServiceTest` | RN-06, RN-07 (RF-10/11/12) | Ingreso habilitado, rechazado por apto, sin inscripción, DNI inexistente, no duplicar el mismo día |
+| `SeguroServiceTest` | RN-02, RN-10 (RF-06/19) | Un seguro por período, alta válida, no borrar si ya se informó a la productora |
+
+Son pruebas unitarias (sin levantar el servidor ni la base). Priorizan las reglas críticas de habilitación, cupo, ingreso y seguro. No automatizan toda la API ni la UI.
+
+Evidencia esperada al correr: `BUILD SUCCESS` y el resumen `Tests run: …, Failures: 0`.
 
 ## Documentación de la API
 

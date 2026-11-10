@@ -96,6 +96,16 @@ En local, el frontend usa por defecto `http://localhost:8080`. En Vercel, `VITE_
 
 Detalle de endpoints: `Backend/API.md`.
 
+## Pruebas automatizadas
+
+En `Backend/`:
+
+```bash
+mvn test
+```
+
+Cubren reglas críticas: habilitación (RN-04/05), cupo y lista de espera (RN-13), control de ingreso (RN-06/07) y seguro por período (RN-02). Detalle de clases y casos en `Backend/README.md`.
+
 ## Módulos implementados
 
 | Módulo | Responsabilidad |
@@ -145,7 +155,7 @@ Modelo entidad-relación: `Database/der.mmd` y `Database/der.png`. Diccionario d
 
 - El panel principal toma indicadores desde `/api/reportes/resumen` y `/api/talleres` para los roles con permiso; otros roles ven solo lo que su perfil permite.
 - La campana del header muestra alertas activas para roles de gestión (`ADMINISTRATIVO` / `COORDINADOR`).
-- Hay pruebas unitarias de habilitación y de cupo/lista de espera; la cobertura aún no cubre todos los módulos.
+- Hay pruebas unitarias de habilitación, cupo/lista de espera, ingreso y seguro (`mvn test` en `Backend/`); no automatizan toda la API ni la UI.
 - En Render (plan gratuito) el backend puede demorar la primera respuesta tras un período de inactividad.
 - El portal público muestra las noticias publicadas; la pantalla interna de alta/edición de noticias es acotada (la API de administración existe).
 
