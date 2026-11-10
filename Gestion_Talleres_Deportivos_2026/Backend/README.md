@@ -1,35 +1,81 @@
 # Backend — Sistema Web de Gestión de Talleres Deportivos (UNJu)
 
-Backend a desarrollar en **Java + Spring Boot**. Expondrá la API REST consumida por el Frontend (React + TypeScript) y se conectará a la base de datos PostgreSQL diseñada en `Database/`.
+API REST en **Java 17 + Spring Boot 3.5**. La consume el frontend React y se conecta a **PostgreSQL**. El esquema se aplica con **Flyway**. Autenticación con **JWT** y autorización por roles.
 
-El código de este módulo todavía no está implementado. La estructura de abajo es la organización prevista.
+## Despliegue
+
+| Recurso | URL |
+| --- | --- |
+| API en Render | https://unju-deportes-backend.onrender.com |
+| Health | https://unju-deportes-backend.onrender.com/api/health |
+| Swagger (local) | http://localhost:8080/swagger-ui.html |
+
+En el plan gratuito de Render el servicio puede tardar en despertar (cold start).
+
+## Requisitos locales
+
+- Java 17
+- Maven
+- Docker Desktop (PostgreSQL 16 vía `docker-compose.yml`)
+
+## Ejecución local
+
+```bash
+cd Gestion_Talleres_Deportivos_2026/Backend
+docker compose up -d
+mvn spring-boot:run "-Dspring-boot.run.profiles=demo"
+```
+
+Sin el perfil `demo` solo queda el usuario inicial de migraciones (`admin` / `Admin2026!`). Con `demo` se cargan talleres de ejemplo y usuarios adicionales (`Demo2026!`). Detalle en `API.md`.
+
+## Variables de entorno
+
+Plantilla: `.env.example`. No subir valores reales al repositorio.
+
+| Variable | Uso |
+| --- | --- |
+| `PORT` | Puerto HTTP (Render lo asigna) |
+| `DB_URL`, `DB_USER`, `DB_PASSWORD` | Conexión PostgreSQL |
+| `JWT_SECRET` | Secreto de firma del token (mín. 32 caracteres) |
+| `FRONTEND_URL` | Orígenes CORS separados por coma (URLs de Vercel y localhost) |
+| `SPRING_PROFILES_ACTIVE` | `demo` para datos de ejemplo |
+| `UPLOAD_DIR` | Carpeta de archivos subidos |
+| `APP_ZONA_HORARIA` | Zona horaria de la aplicación |
 
 ## Organización por módulos
 
-El código se organizará en un paquete por módulo, siguiendo la tabla de módulos de la documentación de diseño (Etapa 2):
-
 ```
 src/main/java/unju/talleres/
-├── auth/            # Autenticación y Usuarios (login, JWT, roles y permisos)
-├── participantes/   # Alta y datos personales de participantes
-├── documentacion/   # Carga y control de documentación (TipoDocumento, Documentacion)
-├── seguro/          # Registro y vigencia del seguro anual, e informe a la productora
-├── aptomedico/      # Registro y vencimiento del apto médico
-├── habilitacion/    # Cálculo del estado de habilitación del participante
-├── oferta/          # Disciplinas, Talleres, HorarioTaller, Periodo, Profesores, Ayudantes
-├── preinscripcion/  # Alta, revisión, aprobación/rechazo y lista de espera
-├── ingreso/         # Control de ingreso (QR/DNI) y Asistencia
-├── alertas/         # Generación de alertas por documentación pendiente/vencida
-├── portal/          # Endpoints públicos (oferta, noticias)
-└── reportes/        # Indicadores y reportes de gestión
+├── auth/            # Login, JWT, usuarios y roles
+├── participantes/   # Padrón de participantes
+├── documentacion/   # Documentación requerida
+├── seguro/          # Seguro anual
+├── aptomedico/      # Apto médico
+├── habilitacion/    # Cálculo del estado de habilitación
+├── oferta/          # Disciplinas, talleres, períodos, docentes
+├── preinscripcion/  # Preinscripciones, cupo y lista de espera
+├── ingreso/         # Control de ingreso y asistencia
+├── alertas/         # Avisos por requisitos pendientes/vencidos
+├── portal/          # Endpoints públicos y noticias
+└── reportes/        # Indicadores de gestión
 ```
 
-Cada paquete de módulo seguirá internamente la misma subestructura: `controller/`, `service/`, `repository/`, `model/` (o `dto/` cuando corresponda).
+Cada módulo usa `controller/`, `service/`, `repository/`, `model/` y `dto/` cuando corresponde.
 
-## Autenticación
+## Roles
 
-JWT. Los roles previstos son: `ADMINISTRATIVO`, `COORDINADOR`, `ADMIN_SISTEMA`, `RESPONSABLE_INGRESO`, `PROFESOR`, `AYUDANTE`, `AUTORIDAD_INSTITUCIONAL`.
+`ADMINISTRATIVO`, `COORDINADOR`, `ADMIN_SISTEMA`, `RESPONSABLE_INGRESO`, `PROFESOR`, `AYUDANTE`, `AUTORIDAD_INSTITUCIONAL`.
 
-## Despliegue previsto
+La matriz de permisos está centralizada en `Permisos.java`. `ADMIN_SISTEMA` administra cuentas; no opera datos de salud ni la gestión operativa de talleres.
 
-Backend y base de datos tienen previsto su despliegue en Render. Todavía no hay ningún componente desplegado.
+## Pruebas
+
+```bash
+mvn test
+```
+
+Incluye pruebas unitarias de la regla de habilitación (`EvaluadorHabilitacionTest`).
+
+## Documentación de la API
+
+Ver `API.md` para endpoints, roles y usuarios de demostración.

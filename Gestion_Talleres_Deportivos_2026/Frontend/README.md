@@ -1,11 +1,21 @@
-
 # UNJu Deportes – Frontend
 
-Sistema web para la gestión de talleres deportivos de la Universidad Nacional de Jujuy (UNJu).
+Aplicación web para la gestión de talleres deportivos de la Universidad Nacional de Jujuy (UNJu).
 
-El frontend permite consultar la oferta deportiva y gestionar las distintas operaciones del sistema mediante una interfaz web, con acceso diferenciado según el rol del usuario.
+Permite consultar la oferta deportiva en el portal público y operar el sistema interno con acceso diferenciado por rol.
 
-## Tecnologías utilizadas
+## Despliegue
+
+| Recurso | URL |
+| --- | --- |
+| Producción | https://trabajo-final-integrador2026-4g8q.vercel.app |
+| Alias | https://trabajo-final-integrador2026.vercel.app |
+| Acceso interno | `/admin` |
+| Backend que consume | https://unju-deportes-backend.onrender.com |
+
+En Vercel el **Root Directory** del proyecto debe ser `Gestion_Talleres_Deportivos_2026/Frontend`. El build es `npm run build` y la salida `dist`. El archivo `vercel.json` reescribe las rutas SPA hacia `index.html`.
+
+## Tecnologías
 
 - React 19
 - TypeScript 6
@@ -21,133 +31,90 @@ El frontend permite consultar la oferta deportiva y gestionar las distintas oper
 ### Portal público
 
 - Consulta de la oferta deportiva.
-- Visualización de talleres y disciplinas.
-- Acceso a información de las actividades deportivas.
-- Inicio del proceso de preinscripción.
+- Preinscripción online.
+- Consulta del estado de una preinscripción.
 
-### Sistema interno de gestión
+### Sistema interno
 
-- **Panel principal:** visualización de indicadores y accesos rápidos.
-- **Participantes:** gestión del padrón de participantes.
-- **Preinscripciones:** consulta y gestión de solicitudes de inscripción.
-- **Oferta deportiva:** consulta y gestión de talleres y disciplinas.
-- **Documentación:** consulta y gestión de documentación de participantes.
-- **Seguros y aptos:** seguimiento de seguros y aptos médicos.
-- **Control de ingreso:** identificación de participantes y registro de asistencia.
-- **Participantes por taller:** consulta de participantes inscriptos en los talleres asignados al profesor.
-- **Reportes:** consulta de información e indicadores para la gestión.
+- **Panel principal:** indicadores y accesos rápidos.
+- **Participantes:** padrón de participantes.
+- **Preinscripciones:** revisión de solicitudes.
+- **Oferta deportiva:** talleres, disciplinas y períodos.
+- **Documentación:** documentación de participantes.
+- **Seguros y aptos:** seguimiento de seguro y apto médico.
+- **Control de ingreso:** identificación y asistencia.
+- **Participantes por taller:** vista del profesor.
+- **Reportes:** indicadores de gestión.
+- **Usuarios:** altas y roles (`ADMIN_SISTEMA`).
+- **Mi perfil:** cambio de contraseña propia.
 
 ## Roles y permisos
 
-El acceso a los módulos se encuentra organizado según el rol del usuario.
-
 | Rol | Acceso principal |
 |---|---|
-| ADMINISTRATIVO | Panel principal, Participantes, Preinscripciones, Oferta deportiva, Documentación, Seguros y aptos y Reportes. |
-| COORDINADOR | Panel principal, Participantes, Preinscripciones, Oferta deportiva, Documentación, Seguros y aptos y Reportes. |
-| PROFESOR | Panel principal, Oferta deportiva y Participantes por taller. |
-| AYUDANTE | Panel principal y Oferta deportiva. |
-| RESPONSABLE_INGRESO | Panel principal, Oferta deportiva y Control de ingreso. |
-| AUTORIDAD_INSTITUCIONAL | Panel principal, Oferta deportiva y Reportes. |
-| ADMIN_SISTEMA | Panel principal, Oferta deportiva y Usuarios. |
+| ADMINISTRATIVO | Panel, Participantes, Preinscripciones, Oferta deportiva, Documentación, Seguros y aptos y Reportes. |
+| COORDINADOR | Panel, Participantes, Preinscripciones, Oferta deportiva, Documentación, Seguros y aptos y Reportes. |
+| PROFESOR | Panel, Oferta deportiva y Participantes por taller. |
+| AYUDANTE | Panel y Oferta deportiva. |
+| RESPONSABLE_INGRESO | Panel, Oferta deportiva y Control de ingreso. |
+| AUTORIDAD_INSTITUCIONAL | Panel, Oferta deportiva y Reportes. |
+| ADMIN_SISTEMA | Panel, Oferta deportiva y Usuarios. |
 
-## Requisitos previos
+## Requisitos
 
-Para ejecutar el proyecto se necesita:
+- Node.js y npm
+- Backend en ejecución (local o Render)
 
-- Node.js
-- npm
-- Backend del sistema en funcionamiento.
-
-## Instalación
-
-Clonar el repositorio:
+## Instalación y ejecución
 
 ```bash
-git clone URL_DEL_REPOSITORIO
-```
-
-Ingresar a la carpeta del frontend:
-
-```bash
-cd Frontend
-```
-
-Instalar las dependencias:
-
-```bash
+git clone https://github.com/YOHVASS/TrabajoFinalIntegrador2026.git
+cd TrabajoFinalIntegrador2026/Gestion_Talleres_Deportivos_2026/Frontend
 npm install
-```
-
-## Ejecución en desarrollo
-
-Iniciar el servidor de desarrollo:
-
-```bash
 npm run dev
 ```
 
-Vite mostrará en la terminal la dirección local para abrir la aplicación en el navegador.
+Abrir `http://localhost:5173` o `http://localhost:5173/admin`.
 
-## Compilación para producción
+### Scripts
 
-Generar la versión de producción:
-
-```bash
-npm run build
-```
-
-Este comando ejecuta primero la verificación y compilación de TypeScript y luego genera la versión optimizada con Vite.
-
-## Análisis de código
-
-Ejecutar ESLint para revisar el código:
-
-```bash
-npm run lint
-```
-
-## Vista previa de producción
-
-Para visualizar localmente la compilación generada:
-
-```bash
-npm run preview
-```
-
-## Dependencias principales
-
-| Dependencia | Uso |
+| Comando | Uso |
 |---|---|
-| react y react-dom | Construcción de la interfaz de usuario. |
-| react-router-dom | Navegación entre páginas y rutas. |
-| lucide-react | Iconos de la interfaz. |
-| html5-qrcode | Lectura de códigos QR mediante cámara. |
-| qrcode.react | Generación de códigos QR. |
-| vite | Servidor de desarrollo y compilación. |
-| typescript | Tipado estático del proyecto. |
-| eslint | Análisis y revisión del código. |
+| `npm run dev` | Servidor de desarrollo |
+| `npm run build` | Compilación de producción (`tsc -b` + Vite) |
+| `npm run preview` | Vista previa del build |
+| `npm run lint` | ESLint |
+
+## Variables de entorno
+
+Plantilla: `.env.example`.
+
+```bash
+VITE_API_URL=http://localhost:8080
+```
+
+En producción (Vercel):
+
+```bash
+VITE_API_URL=https://unju-deportes-backend.onrender.com
+```
+
+Sin `/api` y sin barra final. El cliente agrega `/api` en `src/services/api.ts`. La variable se incorpora en tiempo de build: después de cambiarla hay que redesplegar.
 
 ## Comunicación con el backend
 
-El frontend consume los servicios REST del backend desarrollado con Java y Spring Boot.
+Autenticación JWT. Tras el login, el token se guarda en el navegador y se envía en las solicitudes protegidas.
 
-La autenticación utiliza JWT. Luego de iniciar sesión correctamente, el token se almacena en el navegador y se utiliza para las solicitudes protegidas.
+## Limitaciones
 
-La dirección de la API debe configurarse de acuerdo con el entorno de ejecución del proyecto.
-
-## Despliegue
-
-La planificación tecnológica contempla el despliegue del frontend en Vercel y del backend en Render.
-
-La configuración definitiva depende de las variables de entorno y de las direcciones de los servicios correspondientes.
+- Algunos números del panel principal todavía son de ejemplo.
+- La campana de alertas del header no está totalmente conectada a la API.
+- Si el backend en Render está dormido, las pantallas pueden quedar en “cargando” hasta que responda.
 
 ## Proyecto académico
 
-**Universidad Nacional de Jujuy**
+**Universidad Nacional de Jujuy** — Tecnicatura Universitaria en Programación
 
-Tecnicatura Universitaria en Programación
+**Proyecto:** Sistema Web para la Gestión de los Talleres Deportivos de la UNJu
 
-**Proyecto:** Sistema Web para la Gestión de los Talleres Deportivos de la UNJu.
-
-**Año:** 2026
+**Grupo 182 · Año 2026**

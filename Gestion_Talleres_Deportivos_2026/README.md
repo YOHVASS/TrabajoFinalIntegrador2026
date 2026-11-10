@@ -1,17 +1,12 @@
 # Sistema Web para la Gestión de los Talleres Deportivos - UNJu
 
-Trabajo Final Integrador de la **Tecnicatura Universitaria en Programación a Distancia**. El proyecto propone un sistema web para centralizar y mejorar la gestión de los talleres deportivos de la Universidad Nacional de Jujuy.
+Trabajo Final Integrador de la **Tecnicatura Universitaria en Programación a Distancia**. Sistema web para centralizar y mejorar la gestión de los talleres deportivos de la Universidad Nacional de Jujuy.
 
-## Descripción de la problemática
+## Descripción del problema
 
-Actualmente, la Coordinación de Talleres Deportivos trabaja con un proceso fragmentado y predominantemente manual que combina planillas de Excel, Google Drive, documentación física y redes sociales. Esto genera:
+La Coordinación de Talleres Deportivos trabajaba con un proceso fragmentado (Excel, Google Drive, documentación física y redes sociales). Eso generaba demoras, dificultad para verificar seguro, apto médico y constancia de alumno, inscripciones presenciales y falta de control de ingreso, asistencias e indicadores.
 
-- Demoras en la búsqueda y carga de datos de los participantes.
-- Dificultades para verificar requisitos como el seguro anual, el apto médico y la constancia de alumno.
-- Inscripciones que requieren gestiones presenciales.
-- Falta de una herramienta integrada para controlar el ingreso, registrar asistencias y consultar indicadores de gestión.
-
-La solución propuesta contempla un proceso que va desde la consulta de la oferta y la preinscripción online hasta la revisión administrativa, el control de requisitos, el registro de asistencia y la elaboración de reportes.
+El sistema cubre el recorrido desde la consulta pública de la oferta y la preinscripción online hasta la revisión administrativa, el control de requisitos, el registro de asistencia y los reportes.
 
 ## Equipo
 
@@ -25,89 +20,141 @@ La solución propuesta contempla un proceso que va desde la consulta de la ofert
 
 ## Estado del proyecto
 
-**Segunda entrega: diseño cerrado. El desarrollo todavía no comenzó.**
+Versión funcional implementada y desplegada online.
 
-En esta etapa quedaron definidos los requisitos, las reglas de negocio, los módulos, los diagramas y el diseño de la base de datos. El frontend y el backend todavía no están implementados. El despliegue en Render y Vercel es el despliegue previsto para la etapa de entrega final; todavía no hay ningún componente desplegado.
+Incluye portal público, API REST con JWT y roles, gestión interna (participantes, documentación, seguros y aptos, oferta deportiva, preinscripciones, control de ingreso, reportes y administración de usuarios) y base de datos PostgreSQL con migraciones Flyway.
 
-## Tecnologías seleccionadas
+## Tecnologías
 
-| Componente | Tecnología | Despliegue previsto |
+| Componente | Tecnología | Despliegue |
 | --- | --- | --- |
-| Frontend | React + TypeScript | Vercel |
-| Backend | Java + Spring Boot (API REST) | Render |
-| Base de datos | PostgreSQL | Render PostgreSQL, con Supabase como alternativa |
-| Autenticación | JWT y autorización basada en roles | Integrada en el backend |
+| Frontend | React 19 + TypeScript + Vite | [Vercel](https://trabajo-final-integrador2026-4g8q.vercel.app) |
+| Backend | Java 17 + Spring Boot 3.5 (API REST) | [Render](https://unju-deportes-backend.onrender.com) |
+| Base de datos | PostgreSQL 16 | Render PostgreSQL |
+| Autenticación | JWT y autorización por roles | Integrada en el backend |
 
-## Segunda entrega: documentación realizada
+## Sistema desplegado
 
-Esta entrega reúne las definiciones necesarias antes de comenzar a codificar:
-
-- **Requisitos:** 19 requisitos funcionales y 9 requisitos no funcionales.
-- **Reglas de negocio:** 13 reglas que establecen condiciones de inscripción, habilitación, lista de espera, control de ingreso y acceso a la información.
-- **Módulos:** responsabilidades definidas para organizar el desarrollo del sistema, incluido el módulo Habilitación.
-- **Diagramas:** casos de uso, flujo del proceso integrado y modelo entidad-relación.
-- **Base de datos:** motor seleccionado, entidades (incluida Periodo), diccionario de datos, relaciones, cardinalidades, restricciones y criterios de normalización.
-- **Trazabilidad:** relación entre los 19 requisitos funcionales, las reglas de negocio y las entidades del modelo de datos.
-
-El documento de diseño está en `Documentos/2-Diseno-y-Modulos/`.
-
-### Módulos a desarrollar
-
-| Módulo | Responsabilidad principal |
+| Recurso | URL |
 | --- | --- |
-| Autenticación y usuarios | Gestionar el acceso interno, los roles y los permisos. |
-| Participantes | Registrar datos personales y fotografía. |
-| Documentación | Registrar y controlar la documentación requerida. |
-| Seguro | Registrar el pago, la vigencia del seguro anual y el informe de altas a la productora. |
-| Apto médico | Registrar el apto médico y controlar su vencimiento. |
-| Habilitación | Determinar y mantener el estado de habilitación a partir de la documentación, el seguro y el apto médico. |
-| Oferta deportiva | Administrar disciplinas, talleres, horarios, modalidades, períodos, profesores y ayudantes. |
-| Preinscripciones e inscripciones | Recibir solicitudes online, incluida la lista de espera, y permitir su revisión administrativa. |
-| Control de ingreso y asistencia | Identificar por QR o DNI, verificar la habilitación y registrar asistencias. |
-| Alertas | Avisar sobre requisitos pendientes o vencidos. |
-| Portal público y noticias | Mostrar la oferta deportiva, noticias y avisos. |
-| Reportes e indicadores | Presentar información agregada para la gestión. |
+| Frontend (producción) | https://trabajo-final-integrador2026-4g8q.vercel.app |
+| Frontend (alias) | https://trabajo-final-integrador2026.vercel.app |
+| Backend (API) | https://unju-deportes-backend.onrender.com |
+| Health check | https://unju-deportes-backend.onrender.com/api/health |
+| Acceso interno | `/admin` en el frontend |
+| Repositorio | https://github.com/YOHVASS/TrabajoFinalIntegrador2026 |
 
-Estos módulos representan la organización **prevista** para el desarrollo en el repositorio.
+En el plan gratuito de Render el backend puede tardar en responder la primera vez (cold start).
 
-### Reglas de negocio principales
+### Credenciales de demostración
 
-- El seguro anual y la constancia de alumno son requisitos para participar según las condiciones definidas en el proyecto.
-- El seguro se abona una vez por período y puede cubrir la participación en más de una disciplina mientras esté vigente.
-- El apto médico tiene una vigencia de un año.
-- Un participante se considera habilitado cuando tiene completa la documentación requerida, el seguro vigente y el apto médico vigente.
-- Antes de registrar una asistencia, el sistema debe verificar el estado de habilitación.
-- La identificación en el control de ingreso puede realizarse mediante código QR o número de documento.
-- Cuando un taller alcanza su cupo máximo, las nuevas preinscripciones quedan en lista de espera.
-- El acceso a los datos personales y de salud se restringe según el rol del usuario. Las autoridades institucionales consultan información agregada.
+- Administrador del sistema: `admin` / `Admin2026!` (siempre disponible).
+- Usuarios de demo (`coordinador`, `administrativo`, `ingreso`, `profesor1`, etc.): contraseña `Demo2026!`, solo si el backend corre con el perfil `demo`.
 
-## Diseño de la base de datos
+## Cómo ejecutarlo en local
 
-Se seleccionó **PostgreSQL** porque el sistema contiene entidades relacionadas que requieren integridad referencial y transaccional.
+### Requisitos
 
-El modelo incluye la gestión de:
+- Docker Desktop (PostgreSQL local)
+- Java 17 y Maven
+- Node.js y npm
 
-- Participantes y sus requisitos: documentación, seguros, aptos médicos y alertas.
-- Oferta deportiva: disciplinas, talleres, horarios, períodos, profesores y ayudantes.
-- Participación: preinscripciones, inscripciones y asistencias.
-- Administración del sistema: roles, usuarios internos y noticias.
+### 1. Base de datos
 
-El diseño se plantea en tercera forma normal. Como excepción documentada, el estado de habilitación del participante, y los estados de documentación, seguro y apto médico, se almacenan como datos derivados para agilizar el control de ingreso. Durante la implementación deberán mantenerse actualizados cuando cambie la documentación, el seguro o el apto médico.
+```bash
+cd Gestion_Talleres_Deportivos_2026/Backend
+docker compose up -d
+```
 
-El código del modelo está en `Database/der.mmd` y el diccionario completo en la sección 6.2 del documento de la segunda entrega.
+### 2. Backend
+
+```bash
+cd Gestion_Talleres_Deportivos_2026/Backend
+mvn spring-boot:run "-Dspring-boot.run.profiles=demo"
+```
+
+La API queda en `http://localhost:8080`. Documentación OpenAPI: `http://localhost:8080/swagger-ui.html`.
+
+### 3. Frontend
+
+```bash
+cd Gestion_Talleres_Deportivos_2026/Frontend
+npm install
+npm run dev
+```
+
+Abrir `http://localhost:5173` (portal) o `http://localhost:5173/admin` (gestión).
+
+### Variables de entorno
+
+Los valores reales no se suben al repositorio. Las plantillas están en:
+
+- `Backend/.env.example`
+- `Frontend/.env.example`
+
+En local, el frontend usa por defecto `http://localhost:8080`. En Vercel, `VITE_API_URL` debe apuntar a `https://unju-deportes-backend.onrender.com` (sin `/api` ni barra final). En Render, `FRONTEND_URL` debe listar los orígenes de Vercel separados por coma.
+
+Detalle de endpoints: `Backend/API.md`.
+
+## Módulos implementados
+
+| Módulo | Responsabilidad |
+| --- | --- |
+| Autenticación y usuarios | Login JWT, roles y administración de cuentas (`ADMIN_SISTEMA`). |
+| Participantes | Padrón, datos personales y fotografía. |
+| Documentación | Carga y control de documentación requerida. |
+| Seguro y apto médico | Vigencia del seguro anual y del apto médico. |
+| Habilitación | Estado de habilitación a partir de documentación, seguro y apto. |
+| Oferta deportiva | Disciplinas, talleres, horarios, modalidades, períodos, docentes. |
+| Preinscripciones e inscripciones | Solicitudes online, lista de espera y revisión administrativa. |
+| Control de ingreso | Identificación por QR o DNI y registro de asistencia. |
+| Alertas | API de avisos por requisitos pendientes o vencidos. |
+| Portal público | Oferta, preinscripción y consulta de estado. |
+| Reportes | Indicadores agregados para la gestión. |
+
+## Reglas de negocio principales
+
+- Seguro anual y constancia de alumno según las condiciones del proyecto.
+- Seguro por período; puede cubrir más de una disciplina mientras esté vigente.
+- Apto médico con vigencia de un año.
+- Habilitado = documentación completa + seguro vigente + apto vigente.
+- Antes de registrar asistencia se verifica la habilitación.
+- Identificación de ingreso por QR o documento.
+- Cupo completo → nuevas preinscripciones en lista de espera.
+- Acceso a datos personales y de salud restringido por rol. `ADMIN_SISTEMA` administra cuentas; no opera datos de salud ni altas de talleres. Eso corresponde a `ADMINISTRATIVO` / `COORDINADOR`.
+
+## Base de datos
+
+PostgreSQL. El esquema se crea con Flyway (`Backend/src/main/resources/db/migration/`). El perfil `demo` carga datos de ejemplo (`db/demo/`).
+
+Modelo entidad-relación: `Database/der.mmd` y `Database/der.png`. Diccionario de datos en el documento de la 2.ª entrega.
 
 ## Documentación
 
-| Carpeta | Contenido |
+| Recurso | Ubicación |
 | --- | --- |
-| `Documentos/1-Definicion-del-Problema/` | Propuesta de la 1.ª entrega. |
-| `Documentos/2-Diseno-y-Modulos/` | Documento de diseño de la 2.ª entrega, su PDF y el changelog de correcciones. |
-| `Database/` | Código e imagen del modelo entidad-relación. |
-| `Backend/` | Organización prevista del API en Java y Spring Boot. |
-| `Frontend/` | Organización prevista de la aplicación en React y TypeScript. |
+| 1.ª entrega (definición del problema) | `Documentos/1-Definicion-del-Problema/` |
+| 2.ª entrega (diseño y módulos) | `Documentos/2-Diseno-y-Modulos/` |
+| Modelo de datos | `Database/` |
+| Backend | `Backend/README.md`, `Backend/API.md` |
+| Frontend | `Frontend/README.md` |
+| Informe Final (PDF) | Pendiente de incorporar al repositorio |
+| Video de presentación | Pendiente de incorporar; el enlace irá aquí y en el PDF |
 
-## Próxima etapa
+## Limitaciones conocidas
 
-A partir de la tercera etapa se prevé implementar el backend con **Java y Spring Boot**, la base de datos en **PostgreSQL** y el frontend con **React y TypeScript**.
+- Algunos indicadores del panel principal todavía muestran valores de ejemplo y no todos se leen de la API de reportes.
+- La campana de alertas del header no está completamente conectada a los avisos reales.
+- La cobertura de pruebas automatizadas es limitada (hay pruebas unitarias de la regla de habilitación).
+- En Render (plan gratuito) el backend puede demorar la primera respuesta tras un período de inactividad.
+- El módulo de noticias del portal público está disponible en API; la gestión editorial en pantalla interna es acotada.
 
-Las instrucciones de instalación, configuración y ejecución se agregarán a este README cuando el repositorio cuente con una versión ejecutable del sistema.
+## Estructura del repositorio
+
+```
+Gestion_Talleres_Deportivos_2026/
+├── Backend/       # API Java + Spring Boot
+├── Frontend/      # React + TypeScript
+├── Database/      # DER y documentación del modelo
+└── Documentos/    # Entregas académicas 1 y 2
+```
