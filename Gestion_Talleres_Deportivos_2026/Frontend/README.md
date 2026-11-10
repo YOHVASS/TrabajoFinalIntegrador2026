@@ -31,6 +31,7 @@ En Vercel el **Root Directory** del proyecto debe ser `Gestion_Talleres_Deportiv
 ### Portal público
 
 - Consulta de la oferta deportiva.
+- Noticias, novedades y avisos publicados.
 - Preinscripción online.
 - Consulta del estado de una preinscripción.
 

@@ -147,7 +147,7 @@ Modelo entidad-relación: `Database/der.mmd` y `Database/der.png`. Diccionario d
 - La campana del header muestra alertas activas para roles de gestión (`ADMINISTRATIVO` / `COORDINADOR`).
 - Hay pruebas unitarias de habilitación y de cupo/lista de espera; la cobertura aún no cubre todos los módulos.
 - En Render (plan gratuito) el backend puede demorar la primera respuesta tras un período de inactividad.
-- El módulo de noticias del portal público está disponible en API; la gestión editorial en pantalla interna es acotada.
+- El portal público muestra las noticias publicadas; la pantalla interna de alta/edición de noticias es acotada (la API de administración existe).
 
 ## Estructura del repositorio
 

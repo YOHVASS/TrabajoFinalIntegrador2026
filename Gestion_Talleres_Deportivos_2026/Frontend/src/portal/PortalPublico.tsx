@@ -1,4 +1,5 @@
 
+import { useEffect, useState } from "react";
 import {
     ArrowRight,
     CalendarDays,
@@ -7,13 +8,87 @@ import {
     Dumbbell,
     GraduationCap,
     HeartPulse,
+    Megaphone,
+    Newspaper,
     ShieldCheck,
     Users,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { api } from "../services/api";
+import type { PaginaResponse } from "../types";
 import "./PortalPublico.css";
 
+interface NoticiaPublica {
+    id: number;
+    titulo: string;
+    contenido: string;
+    tipo: "NOTICIA" | "NOVEDAD" | "AVISO";
+    fechaPublicacion: string;
+    autor: string;
+}
+
+function etiquetaTipo(tipo: NoticiaPublica["tipo"]) {
+    switch (tipo) {
+        case "AVISO":
+            return "Aviso";
+        case "NOVEDAD":
+            return "Novedad";
+        default:
+            return "Noticia";
+    }
+}
+
+function formatearFecha(valor: string) {
+    const fecha = new Date(valor);
+    if (Number.isNaN(fecha.getTime())) {
+        return "";
+    }
+    return fecha.toLocaleDateString("es-AR", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+    });
+}
+
 function PortalPublico() {
+    const [noticias, setNoticias] = useState<NoticiaPublica[]>([]);
+    const [cargandoNoticias, setCargandoNoticias] = useState(true);
+    const [errorNoticias, setErrorNoticias] = useState("");
+
+    useEffect(() => {
+        let activo = true;
+
+        async function cargarNoticias() {
+            setCargandoNoticias(true);
+            setErrorNoticias("");
+            try {
+                const pagina = await api<PaginaResponse<NoticiaPublica>>(
+                    "/public/noticias?pagina=0&tamanio=6"
+                );
+                if (activo) {
+                    setNoticias(pagina.contenido);
+                }
+            } catch {
+                if (activo) {
+                    setErrorNoticias(
+                        "No se pudieron cargar las noticias por ahora."
+                    );
+                    setNoticias([]);
+                }
+            } finally {
+                if (activo) {
+                    setCargandoNoticias(false);
+                }
+            }
+        }
+
+        void cargarNoticias();
+
+        return () => {
+            activo = false;
+        };
+    }, []);
+
     return (
         <div className="portal-publico">
             <header className="portal-header">
@@ -30,6 +105,7 @@ function PortalPublico() {
                 <nav className="portal-nav">
                     <a href="#inicio">Inicio</a>
                     <a href="#beneficios">Beneficios</a>
+                    <a href="#noticias">Noticias</a>
                     <a href="#informacion">Información</a>
                 </nav>
 
@@ -139,6 +215,63 @@ function PortalPublico() {
                             </p>
                         </article>
                     </div>
+                </section>
+
+                <section className="portal-noticias" id="noticias">
+                    <div className="portal-section-heading">
+                        <span>NOVEDADES Y AVISOS</span>
+                        <h2>Noticias del área de Deportes</h2>
+                        <p>
+                            Información publicada por la gestión de talleres
+                            deportivos.
+                        </p>
+                    </div>
+
+                    {cargandoNoticias ? (
+                        <p className="portal-noticias-mensaje">
+                            Cargando noticias...
+                        </p>
+                    ) : errorNoticias ? (
+                        <p className="portal-noticias-mensaje">
+                            {errorNoticias}
+                        </p>
+                    ) : noticias.length === 0 ? (
+                        <p className="portal-noticias-mensaje">
+                            Todavía no hay noticias publicadas.
+                        </p>
+                    ) : (
+                        <div className="portal-noticias-grid">
+                            {noticias.map((noticia) => (
+                                <article
+                                    key={noticia.id}
+                                    className="portal-noticia-item"
+                                >
+                                    <div className="portal-noticia-meta">
+                                        <span
+                                            className={`portal-noticia-tipo tipo-${noticia.tipo.toLowerCase()}`}
+                                        >
+                                            {noticia.tipo === "AVISO" ? (
+                                                <Megaphone size={14} />
+                                            ) : (
+                                                <Newspaper size={14} />
+                                            )}
+                                            {etiquetaTipo(noticia.tipo)}
+                                        </span>
+                                        <time dateTime={noticia.fechaPublicacion}>
+                                            {formatearFecha(
+                                                noticia.fechaPublicacion
+                                            )}
+                                        </time>
+                                    </div>
+                                    <h3>{noticia.titulo}</h3>
+                                    <p>{noticia.contenido}</p>
+                                    {noticia.autor && (
+                                        <small>Por {noticia.autor}</small>
+                                    )}
+                                </article>
+                            ))}
+                        </div>
+                    )}
                 </section>
 
                 <section className="portal-information" id="informacion">
