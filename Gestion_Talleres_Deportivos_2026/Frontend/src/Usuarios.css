@@ -1,0 +1,132 @@
+.usuarios-page {
+    width: 100%;
+    min-width: 0;
+    padding: 0 0 30px 24px;
+    box-sizing: border-box;
+}
+
+.usuarios-heading h1,
+.usuarios-card h2 {
+    margin: 0 0 6px;
+    color: #102747;
+}
+
+.usuarios-heading p,
+.usuarios-card p {
+    margin: 0;
+    color: #748197;
+}
+
+.usuarios-card {
+    margin-top: 18px;
+    padding: 20px;
+    border: 1px solid #e4ebf5;
+    border-radius: 14px;
+    background: #fff;
+}
+
+.usuarios-card-perfil {
+    margin: 18px 0 0;
+}
+
+.usuarios-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+    align-items: end;
+}
+
+.usuarios-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: #34445b;
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.usuarios-form input,
+.usuarios-form select {
+    min-height: 40px;
+    padding: 0 12px;
+    border: 1px solid #dce3ed;
+    border-radius: 9px;
+    color: #102747;
+    background: #fff;
+    font: inherit;
+}
+
+.usuarios-primary,
+.usuarios-acciones button {
+    min-height: 40px;
+    padding: 0 16px;
+    border-radius: 9px;
+    border: 1px solid #dce3ed;
+    background: #fff;
+    color: #34445b;
+    font-size: 13px;
+    font-weight: 650;
+    cursor: pointer;
+}
+
+.usuarios-primary {
+    border-color: #2463d4;
+    background: #2463d4;
+    color: #fff;
+}
+
+.usuarios-primary:disabled,
+.usuarios-acciones button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.usuarios-tabla-wrap {
+    overflow-x: auto;
+    margin-top: 12px;
+}
+
+.usuarios-tabla {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.usuarios-tabla th,
+.usuarios-tabla td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #e4ebf5;
+    text-align: left;
+    color: #24344a;
+    font-size: 14px;
+}
+
+.usuarios-tabla th {
+    color: #748197;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.usuarios-acciones {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.usuarios-error,
+.usuarios-aviso {
+    margin-top: 14px;
+    padding: 10px 12px;
+    border-radius: 9px;
+    font-size: 14px;
+}
+
+.usuarios-error {
+    background: #fff1f1;
+    color: #9d2430;
+}
+
+.usuarios-aviso {
+    background: #eef8f1;
+    color: #17693a;
+}

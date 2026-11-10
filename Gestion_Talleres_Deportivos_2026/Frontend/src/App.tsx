@@ -33,6 +33,7 @@ import SegurosAptos from "./SegurosAptos";
 import ControlIngreso from "./ControlIngreso";
 import ParticipantesTaller from "./ParticipantesTaller";
 import Reportes from "./Reportes";
+import Usuarios, { CambiarPassword } from "./Usuarios";
 import type { PaginaResponse } from "./types";
 
 interface PreinscripcionPendiente {
@@ -58,6 +59,7 @@ const menuItems = [
     { label: "Control de ingreso", icon: CheckCircle2 },
     { label: "Participantes por taller", icon: Users },
     { label: "Reportes", icon: Activity },
+    { label: "Usuarios", icon: UserRound },
 ];
 
 const permisosMenu: Record<string, string[]> = {
@@ -101,6 +103,7 @@ const permisosMenu: Record<string, string[]> = {
     ADMIN_SISTEMA: [
         "Panel principal",
         "Oferta deportiva",
+        "Usuarios",
     ],
 };
 
@@ -432,6 +435,9 @@ function App() {
                     <ParticipantesTaller />
                 ) : activeMenu === "Reportes" ? (
                     <Reportes />
+                ) : activeMenu === "Usuarios" &&
+                rolUsuario === "ADMIN_SISTEMA" ? (
+                    <Usuarios />
                 ) : activeMenu === "Mi perfil" ? (
                     <div className="page-container">
                         <section className="welcome-section">
@@ -459,6 +465,7 @@ function App() {
                                 </p>
                             </div>
                         </article>
+                        <CambiarPassword usuarioId={usuario.id} />
                     </div>
                 ) : (
                     <div className="page-container">

@@ -49,7 +49,7 @@ El acceso a los módulos se encuentra organizado según el rol del usuario.
 | AYUDANTE | Panel principal y Oferta deportiva. |
 | RESPONSABLE_INGRESO | Panel principal, Oferta deportiva y Control de ingreso. |
 | AUTORIDAD_INSTITUCIONAL | Panel principal, Oferta deportiva y Reportes. |
-| ADMIN_SISTEMA | Panel principal y Oferta deportiva. |
+| ADMIN_SISTEMA | Panel principal, Oferta deportiva y Usuarios. |
 
 ## Requisitos previos
 
