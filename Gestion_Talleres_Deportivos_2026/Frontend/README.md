@@ -107,7 +107,7 @@ Autenticación JWT. Tras el login, el token se guarda en el navegador y se enví
 
 ## Limitaciones
 
-- Algunos números del panel principal todavía son de ejemplo.
+- El panel principal usa datos de la API de reportes y de talleres según el rol.
 - La campana de alertas del header no está totalmente conectada a la API.
 - Si el backend en Render está dormido, las pantallas pueden quedar en “cargando” hasta que responda.
 

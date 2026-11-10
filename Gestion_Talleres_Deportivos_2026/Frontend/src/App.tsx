@@ -40,6 +40,20 @@ interface PreinscripcionPendiente {
     estado: string;
 }
 
+interface ResumenPanel {
+    participantesActivos: number;
+    habilitados: number;
+    noHabilitados: number;
+    conRequisitosPendientes: number;
+    preinscripcionesPendientes: number;
+    aptosPorVencer: number;
+    alertasActivas: number;
+}
+
+interface TallerResumen {
+    id: number;
+}
+
 interface UsuarioSesion {
     id?: number;
     nombreUsuario?: string;
@@ -47,6 +61,13 @@ interface UsuarioSesion {
     apellido?: string;
     rol?: string;
     estado?: string;
+}
+
+function formatearNumero(valor: number | null | undefined) {
+    if (valor == null) {
+        return "—";
+    }
+    return valor.toLocaleString("es-AR");
 }
 
 const menuItems = [
@@ -162,86 +183,168 @@ function App() {
         setPerfilAbierto(false);
     }
 
-    const [preinscripcionesPendientes, setPreinscripcionesPendientes] =
-        useState(0);
+    const [resumen, setResumen] = useState<ResumenPanel | null>(null);
+    const [talleresActivos, setTalleresActivos] = useState<number | null>(null);
+    const [cargandoPanel, setCargandoPanel] = useState(false);
+
+    const puedeVerReportes = permisosMenu[rolUsuario]?.includes("Reportes");
+    const puedeVerPreinscripciones =
+        permisosMenu[rolUsuario]?.includes("Preinscripciones");
 
     useEffect(() => {
-        if (
-            !autenticado ||
-            !permisosMenu[rolUsuario]?.includes("Preinscripciones")
-        ) {
+        if (!autenticado) {
             return;
         }
 
         let activo = true;
 
-        async function cargarPendientes() {
-            try {
-                const respuesta = await api<
-                    PaginaResponse<PreinscripcionPendiente>
-                >("/preinscripciones?pagina=0&tamanio=1000&estado=PENDIENTE");
+        async function cargarPanel() {
+            setCargandoPanel(true);
 
-                if (activo) {
-                    setPreinscripcionesPendientes(
-                        respuesta.contenido.length
-                    );
+            try {
+                const talleresPromise = api<TallerResumen[]>("/talleres")
+                    .then((lista) => lista.length)
+                    .catch(() => null);
+
+                const resumenPromise = puedeVerReportes
+                    ? api<ResumenPanel>("/reportes/resumen").catch(() => null)
+                    : puedeVerPreinscripciones
+                      ? api<PaginaResponse<PreinscripcionPendiente>>(
+                            "/preinscripciones?pagina=0&tamanio=1000&estado=PENDIENTE"
+                        )
+                            .then(
+                                (respuesta): ResumenPanel => ({
+                                    participantesActivos: 0,
+                                    habilitados: 0,
+                                    noHabilitados: 0,
+                                    conRequisitosPendientes: 0,
+                                    preinscripcionesPendientes:
+                                        respuesta.contenido.length,
+                                    aptosPorVencer: 0,
+                                    alertasActivas: 0,
+                                })
+                            )
+                            .catch(() => null)
+                      : Promise.resolve(null);
+
+                const [cantidadTalleres, datosResumen] = await Promise.all([
+                    talleresPromise,
+                    resumenPromise,
+                ]);
+
+                if (!activo) {
+                    return;
                 }
-            } catch (error) {
-                console.error(
-                    "No se pudo actualizar el contador de preinscripciones:",
-                    error
-                );
+
+                setTalleresActivos(cantidadTalleres);
+                setResumen(datosResumen);
+            } finally {
+                if (activo) {
+                    setCargandoPanel(false);
+                }
             }
         }
 
-        cargarPendientes();
+        void cargarPanel();
 
-        const intervalo = window.setInterval(cargarPendientes, 30000);
+        const intervalo = window.setInterval(() => {
+            void cargarPanel();
+        }, 30000);
 
         return () => {
             activo = false;
             window.clearInterval(intervalo);
         };
-    }, [autenticado, rolUsuario]);
+    }, [autenticado, puedeVerPreinscripciones, puedeVerReportes]);
+
+    const totalParticipantes = resumen
+        ? resumen.habilitados +
+          resumen.noHabilitados +
+          resumen.conRequisitosPendientes
+        : null;
+    const porcentajeHabilitados =
+        totalParticipantes && totalParticipantes > 0 && resumen
+            ? Math.round((resumen.habilitados / totalParticipantes) * 100)
+            : null;
+    const pendientesHabilitacion = resumen
+        ? resumen.noHabilitados + resumen.conRequisitosPendientes
+        : null;
+    const preinscripcionesPendientes =
+        resumen?.preinscripcionesPendientes ?? 0;
 
     const indicators = [
         {
             title: "Participantes registrados",
-            value: "1.248",
-            detail: "Participantes en el sistema",
-            change: "+12,5%",
+            value: cargandoPanel
+                ? "..."
+                : formatearNumero(
+                      puedeVerReportes ? totalParticipantes : null
+                  ),
+            detail: puedeVerReportes
+                ? "Participantes en el sistema"
+                : "Visible para roles con acceso a reportes",
+            change: puedeVerReportes ? "Datos actuales" : "Según permisos",
             icon: Users,
             color: "blue",
             positive: true,
         },
         {
             title: "Talleres activos",
-            value: "32",
-            detail: "Disciplinas disponibles",
-            change: "+4 este período",
+            value: cargandoPanel ? "..." : formatearNumero(talleresActivos),
+            detail: "Talleres cargados en la oferta",
+            change: "Oferta deportiva",
             icon: Dumbbell,
             color: "purple",
             positive: true,
         },
         {
             title: "Preinscripciones",
-            value: String(preinscripcionesPendientes),
+            value: cargandoPanel
+                ? "..."
+                : formatearNumero(
+                      puedeVerReportes || puedeVerPreinscripciones
+                          ? preinscripcionesPendientes
+                          : null
+                  ),
             detail: "Pendientes de revisión",
-            change: "Requieren atención",
+            change:
+                preinscripcionesPendientes > 0
+                    ? "Requieren atención"
+                    : "Sin pendientes",
             icon: ClipboardList,
             color: "orange",
-            positive: false,
+            positive: preinscripcionesPendientes === 0,
         },
         {
             title: "Participantes habilitados",
-            value: "936",
+            value: cargandoPanel
+                ? "..."
+                : formatearNumero(
+                      puedeVerReportes ? resumen?.habilitados : null
+                  ),
             detail: "Con requisitos completos",
-            change: "75% del total",
+            change:
+                porcentajeHabilitados != null
+                    ? `${porcentajeHabilitados}% del total`
+                    : "Según permisos",
             icon: ShieldCheck,
             color: "green",
             positive: true,
         },
     ];
+
+    const alertasVisibles = [
+        puedeVerPreinscripciones && preinscripcionesPendientes > 0,
+        menuVisible.some((item) => item.label === "Documentación") &&
+            (resumen?.conRequisitosPendientes ?? 0) > 0,
+        menuVisible.some((item) => item.label === "Seguros y aptos") &&
+            (resumen?.aptosPorVencer ?? 0) > 0,
+    ].filter(Boolean).length;
+
+    const contadorAlertas =
+        puedeVerReportes && resumen
+            ? resumen.alertasActivas
+            : alertasVisibles;
 
     if (!autenticado) {
         return <Login />;
@@ -564,24 +667,46 @@ function App() {
                                         <span>
                                             Estado de habilitación
                                         </span>
-                                        <strong>75%</strong>
+                                        <strong>
+                                            {cargandoPanel
+                                                ? "..."
+                                                : porcentajeHabilitados != null
+                                                  ? `${porcentajeHabilitados}%`
+                                                  : "—"}
+                                        </strong>
                                     </div>
 
                                     <div className="progress-track">
                                         <div
                                             className="progress-fill"
-                                            style={{ width: "75%" }}
+                                            style={{
+                                                width: `${porcentajeHabilitados ?? 0}%`,
+                                            }}
                                         />
                                     </div>
 
                                     <div className="progress-legend">
                                         <span>
                                             <i className="legend-dot green-dot" />{" "}
-                                            Habilitados: 936
+                                            Habilitados:{" "}
+                                            {cargandoPanel
+                                                ? "..."
+                                                : formatearNumero(
+                                                      puedeVerReportes
+                                                          ? resumen?.habilitados
+                                                          : null
+                                                  )}
                                         </span>
                                         <span>
                                             <i className="legend-dot orange-dot" />{" "}
-                                            Pendientes: 312
+                                            Pendientes:{" "}
+                                            {cargandoPanel
+                                                ? "..."
+                                                : formatearNumero(
+                                                      puedeVerReportes
+                                                          ? pendientesHabilitacion
+                                                          : null
+                                                  )}
                                         </span>
                                     </div>
                                 </div>
@@ -670,14 +795,13 @@ function App() {
                                         </p>
                                     </div>
 
-                                    <span className="alert-counter">3</span>
+                                    <span className="alert-counter">
+                                        {cargandoPanel ? "…" : contadorAlertas}
+                                    </span>
                                 </div>
 
                                 <div className="alert-list">
-                                    {menuVisible.some(
-                                        (item) =>
-                                            item.label === "Preinscripciones"
-                                    ) && (
+                                    {puedeVerPreinscripciones && (
                                         <div className="alert-item">
                                             <div className="alert-icon alert-orange">
                                                 <ClipboardList size={19} />
@@ -692,7 +816,11 @@ function App() {
                                                     revisión.
                                                 </span>
                                                 <small>
-                                                    {preinscripcionesPendientes}{" "}
+                                                    {cargandoPanel
+                                                        ? "..."
+                                                        : formatearNumero(
+                                                              preinscripcionesPendientes
+                                                          )}{" "}
                                                     solicitudes
                                                 </small>
                                             </div>
@@ -722,7 +850,12 @@ function App() {
                                                     pendientes.
                                                 </span>
                                                 <small>
-                                                    42 participantes
+                                                    {cargandoPanel
+                                                        ? "..."
+                                                        : formatearNumero(
+                                                              resumen?.conRequisitosPendientes
+                                                          )}{" "}
+                                                    participantes
                                                 </small>
                                             </div>
 
@@ -751,7 +884,12 @@ function App() {
                                                     vencimiento.
                                                 </span>
                                                 <small>
-                                                    12 participantes
+                                                    {cargandoPanel
+                                                        ? "..."
+                                                        : formatearNumero(
+                                                              resumen?.aptosPorVencer
+                                                          )}{" "}
+                                                    participantes
                                                 </small>
                                             </div>
 
@@ -761,6 +899,15 @@ function App() {
                                             />
                                         </div>
                                     )}
+
+                                    {!cargandoPanel &&
+                                        alertasVisibles === 0 &&
+                                        contadorAlertas === 0 && (
+                                            <p className="alert-description">
+                                                No hay alertas pendientes por
+                                                ahora.
+                                            </p>
+                                        )}
                                 </div>
 
                                 {menuVisible.some(
