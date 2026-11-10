@@ -54,6 +54,17 @@ interface TallerResumen {
     id: number;
 }
 
+interface AlertaItem {
+    id: number;
+    idParticipante: number;
+    dni: string;
+    participante: string;
+    tipo: string;
+    mensaje: string;
+    fechaGenerada: string;
+    estado: string;
+}
+
 interface UsuarioSesion {
     id?: number;
     nombreUsuario?: string;
@@ -68,6 +79,34 @@ function formatearNumero(valor: number | null | undefined) {
         return "—";
     }
     return valor.toLocaleString("es-AR");
+}
+
+function etiquetaTipoAlerta(tipo: string) {
+    switch (tipo) {
+        case "DOCUMENTACION_VENCIDA":
+            return "Documentación vencida";
+        case "DOCUMENTACION_PENDIENTE":
+            return "Documentación pendiente";
+        case "APTO_MEDICO_POR_VENCER":
+            return "Apto médico por vencer";
+        case "SEGURO_VENCIDO":
+            return "Seguro vencido";
+        case "SEGURO_PROXIMO_A_VENCER":
+            return "Seguro próximo a vencer";
+        default:
+            return tipo;
+    }
+}
+
+function destinoAlerta(tipo: string) {
+    if (
+        tipo === "APTO_MEDICO_POR_VENCER" ||
+        tipo === "SEGURO_VENCIDO" ||
+        tipo === "SEGURO_PROXIMO_A_VENCER"
+    ) {
+        return "Seguros y aptos";
+    }
+    return "Documentación";
 }
 
 const menuItems = [
@@ -142,6 +181,10 @@ function App() {
     const [activeMenu, setActiveMenu] = useState("Panel principal");
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [perfilAbierto, setPerfilAbierto] = useState(false);
+    const [alertasAbiertas, setAlertasAbiertas] = useState(false);
+    const [alertasActivasCount, setAlertasActivasCount] = useState(0);
+    const [alertasLista, setAlertasLista] = useState<AlertaItem[]>([]);
+    const [cargandoAlertas, setCargandoAlertas] = useState(false);
 
     const [autenticado, setAutenticado] = useState(() =>
         Boolean(localStorage.getItem("token"))
@@ -174,6 +217,7 @@ function App() {
         setActiveMenu(seccion);
         setSidebarOpen(false);
         setPerfilAbierto(false);
+        setAlertasAbiertas(false);
     }
 
     function cerrarSesion() {
@@ -181,6 +225,7 @@ function App() {
         localStorage.removeItem("usuario");
         setAutenticado(false);
         setPerfilAbierto(false);
+        setAlertasAbiertas(false);
     }
 
     const [resumen, setResumen] = useState<ResumenPanel | null>(null);
@@ -190,6 +235,76 @@ function App() {
     const puedeVerReportes = permisosMenu[rolUsuario]?.includes("Reportes");
     const puedeVerPreinscripciones =
         permisosMenu[rolUsuario]?.includes("Preinscripciones");
+    const puedeVerAlertas =
+        rolUsuario === "ADMINISTRATIVO" || rolUsuario === "COORDINADOR";
+
+    useEffect(() => {
+        if (!autenticado || !puedeVerAlertas) {
+            setAlertasActivasCount(0);
+            setAlertasLista([]);
+            return;
+        }
+
+        let activo = true;
+
+        async function cargarContador() {
+            try {
+                const data = await api<{ activas: number }>("/alertas/contador");
+                if (activo) {
+                    setAlertasActivasCount(data.activas ?? 0);
+                }
+            } catch {
+                if (activo) {
+                    setAlertasActivasCount(0);
+                }
+            }
+        }
+
+        void cargarContador();
+        const intervalo = window.setInterval(() => {
+            void cargarContador();
+        }, 30000);
+
+        return () => {
+            activo = false;
+            window.clearInterval(intervalo);
+        };
+    }, [autenticado, puedeVerAlertas]);
+
+    useEffect(() => {
+        if (!alertasAbiertas || !puedeVerAlertas) {
+            return;
+        }
+
+        let activo = true;
+
+        async function cargarAlertas() {
+            setCargandoAlertas(true);
+            try {
+                const pagina = await api<PaginaResponse<AlertaItem>>(
+                    "/alertas?estado=ACTIVA&pagina=0&tamanio=10"
+                );
+                if (activo) {
+                    setAlertasLista(pagina.contenido);
+                    setAlertasActivasCount(pagina.totalElementos);
+                }
+            } catch {
+                if (activo) {
+                    setAlertasLista([]);
+                }
+            } finally {
+                if (activo) {
+                    setCargandoAlertas(false);
+                }
+            }
+        }
+
+        void cargarAlertas();
+
+        return () => {
+            activo = false;
+        };
+    }, [alertasAbiertas, puedeVerAlertas]);
 
     useEffect(() => {
         if (!autenticado) {
@@ -463,21 +578,91 @@ function App() {
                     </div>
 
                     <div className="topbar-actions">
-                        <button
-                            className="notification-button"
-                            aria-label="Notificaciones"
-                        >
-                            <Bell size={20} />
-                            <span className="notification-dot" />
-                        </button>
+                        <div className="notification-container">
+                            <button
+                                type="button"
+                                className="notification-button"
+                                aria-label="Notificaciones"
+                                aria-expanded={alertasAbiertas}
+                                onClick={() => {
+                                    setAlertasAbiertas(!alertasAbiertas);
+                                    setPerfilAbierto(false);
+                                }}
+                            >
+                                <Bell size={20} />
+                                {puedeVerAlertas && alertasActivasCount > 0 && (
+                                    <span className="notification-dot" />
+                                )}
+                            </button>
+
+                            {alertasAbiertas && (
+                                <div className="notification-dropdown">
+                                    <div className="notification-dropdown-header">
+                                        <strong>Alertas</strong>
+                                        <span>
+                                            {puedeVerAlertas
+                                                ? `${formatearNumero(alertasActivasCount)} activas`
+                                                : "Sin acceso"}
+                                        </span>
+                                    </div>
+
+                                    {!puedeVerAlertas ? (
+                                        <p className="notification-empty">
+                                            Tu rol no administra alertas de
+                                            participantes.
+                                        </p>
+                                    ) : cargandoAlertas ? (
+                                        <p className="notification-empty">
+                                            Cargando alertas...
+                                        </p>
+                                    ) : alertasLista.length === 0 ? (
+                                        <p className="notification-empty">
+                                            No hay alertas activas.
+                                        </p>
+                                    ) : (
+                                        <ul className="notification-list">
+                                            {alertasLista.map((alerta) => (
+                                                <li key={alerta.id}>
+                                                    <button
+                                                        type="button"
+                                                        className="notification-item"
+                                                        onClick={() =>
+                                                            navegarA(
+                                                                destinoAlerta(
+                                                                    alerta.tipo
+                                                                )
+                                                            )
+                                                        }
+                                                    >
+                                                        <strong>
+                                                            {etiquetaTipoAlerta(
+                                                                alerta.tipo
+                                                            )}
+                                                        </strong>
+                                                        <span>
+                                                            {alerta.participante}{" "}
+                                                            · DNI {alerta.dni}
+                                                        </span>
+                                                        <small>
+                                                            {alerta.mensaje}
+                                                        </small>
+                                                    </button>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+                            )}
+                        </div>
 
                         <div className="user-profile-container">
                             <button
                                 type="button"
                                 className="user-profile"
-                                onClick={() =>
-                                    setPerfilAbierto(!perfilAbierto)
-                                }
+                                onClick={() => {
+                                    setPerfilAbierto(!perfilAbierto);
+                                    setAlertasAbiertas(false);
+                                }}
                                 aria-expanded={perfilAbierto}
                             >
                                 <div className="user-avatar">{iniciales}</div>
