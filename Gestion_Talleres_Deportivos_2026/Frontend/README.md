@@ -46,6 +46,7 @@ En Vercel el **Root Directory** del proyecto debe ser `Gestion_Talleres_Deportiv
 - **Control de ingreso:** identificación y asistencia.
 - **Participantes por taller:** vista del profesor.
 - **Reportes:** indicadores de gestión.
+- **Noticias:** alta, edición y baja de publicaciones del portal.
 - **Usuarios:** altas y roles (`ADMIN_SISTEMA`).
 - **Mi perfil:** cambio de contraseña propia.
 
@@ -53,8 +54,8 @@ En Vercel el **Root Directory** del proyecto debe ser `Gestion_Talleres_Deportiv
 
 | Rol | Acceso principal |
 |---|---|
-| ADMINISTRATIVO | Panel, Participantes, Preinscripciones, Oferta deportiva, Documentación, Seguros y aptos y Reportes. |
-| COORDINADOR | Panel, Participantes, Preinscripciones, Oferta deportiva, Documentación, Seguros y aptos y Reportes. |
+| ADMINISTRATIVO | Panel, Participantes, Preinscripciones, Oferta deportiva, Documentación, Seguros y aptos, Noticias y Reportes. |
+| COORDINADOR | Panel, Participantes, Preinscripciones, Oferta deportiva, Documentación, Seguros y aptos, Noticias y Reportes. |
 | PROFESOR | Panel, Oferta deportiva y Participantes por taller. |
 | AYUDANTE | Panel y Oferta deportiva. |
 | RESPONSABLE_INGRESO | Panel, Oferta deportiva y Control de ingreso. |

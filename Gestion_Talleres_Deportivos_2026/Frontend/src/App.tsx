@@ -15,6 +15,7 @@ import {
     LayoutDashboard,
     LogOut,
     Menu,
+    Newspaper,
     ShieldCheck,
     Users,
     UserRound,
@@ -33,6 +34,7 @@ import SegurosAptos from "./SegurosAptos";
 import ControlIngreso from "./ControlIngreso";
 import ParticipantesTaller from "./ParticipantesTaller";
 import Reportes from "./Reportes";
+import Noticias from "./Noticias";
 import Usuarios, { CambiarPassword } from "./Usuarios";
 import type { PaginaResponse } from "./types";
 
@@ -116,6 +118,7 @@ const menuItems = [
     { label: "Oferta deportiva", icon: Dumbbell },
     { label: "Documentación", icon: FileCheck2 },
     { label: "Seguros y aptos", icon: ShieldCheck },
+    { label: "Noticias", icon: Newspaper },
     { label: "Control de ingreso", icon: CheckCircle2 },
     { label: "Participantes por taller", icon: Users },
     { label: "Reportes", icon: Activity },
@@ -130,6 +133,7 @@ const permisosMenu: Record<string, string[]> = {
         "Oferta deportiva",
         "Documentación",
         "Seguros y aptos",
+        "Noticias",
         "Reportes",
     ],
     COORDINADOR: [
@@ -139,6 +143,7 @@ const permisosMenu: Record<string, string[]> = {
         "Oferta deportiva",
         "Documentación",
         "Seguros y aptos",
+        "Noticias",
         "Reportes",
     ],
     PROFESOR: [
@@ -715,6 +720,10 @@ function App() {
                     <Documentacion />
                 ) : activeMenu === "Seguros y aptos" ? (
                     <SegurosAptos />
+                ) : activeMenu === "Noticias" &&
+                (rolUsuario === "ADMINISTRATIVO" ||
+                    rolUsuario === "COORDINADOR") ? (
+                    <Noticias />
                 ) : activeMenu === "Control de ingreso" &&
                 rolUsuario === "RESPONSABLE_INGRESO" ? (
                     <ControlIngreso />

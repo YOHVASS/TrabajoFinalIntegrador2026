@@ -119,7 +119,8 @@ Cubren reglas críticas: habilitación (RN-04/05), cupo y lista de espera (RN-13
 | Preinscripciones e inscripciones | Solicitudes online, lista de espera y revisión administrativa. |
 | Control de ingreso | Identificación por QR o DNI y registro de asistencia. |
 | Alertas | API de avisos por requisitos pendientes o vencidos. |
-| Portal público | Oferta, preinscripción y consulta de estado. |
+| Portal público | Oferta, noticias, preinscripción y consulta de estado. |
+| Noticias | Administración de publicaciones del portal (roles de gestión). |
 | Reportes | Indicadores agregados para la gestión. |
 
 ## Reglas de negocio principales
@@ -157,7 +158,7 @@ Modelo entidad-relación: `Database/der.mmd` y `Database/der.png`. Diccionario d
 - La campana del header muestra alertas activas para roles de gestión (`ADMINISTRATIVO` / `COORDINADOR`).
 - Hay pruebas unitarias de habilitación, cupo/lista de espera, ingreso y seguro (`mvn test` en `Backend/`); no automatizan toda la API ni la UI.
 - En Render (plan gratuito) el backend puede demorar la primera respuesta tras un período de inactividad.
-- El portal público muestra las noticias publicadas; la pantalla interna de alta/edición de noticias es acotada (la API de administración existe).
+- El portal público muestra las noticias; administrativos y coordinadores las administran desde el menú Noticias.
 
 ## Estructura del repositorio
 
