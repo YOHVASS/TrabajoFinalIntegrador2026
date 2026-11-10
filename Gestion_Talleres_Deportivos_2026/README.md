@@ -145,7 +145,7 @@ Modelo entidad-relación: `Database/der.mmd` y `Database/der.png`. Diccionario d
 
 - El panel principal toma indicadores desde `/api/reportes/resumen` y `/api/talleres` para los roles con permiso; otros roles ven solo lo que su perfil permite.
 - La campana del header muestra alertas activas para roles de gestión (`ADMINISTRATIVO` / `COORDINADOR`).
-- La cobertura de pruebas automatizadas es limitada (hay pruebas unitarias de la regla de habilitación).
+- Hay pruebas unitarias de habilitación y de cupo/lista de espera; la cobertura aún no cubre todos los módulos.
 - En Render (plan gratuito) el backend puede demorar la primera respuesta tras un período de inactividad.
 - El módulo de noticias del portal público está disponible en API; la gestión editorial en pantalla interna es acotada.
 

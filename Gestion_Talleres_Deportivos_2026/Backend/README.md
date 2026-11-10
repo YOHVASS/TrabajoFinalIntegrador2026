@@ -74,7 +74,9 @@ La matriz de permisos está centralizada en `Permisos.java`. `ADMIN_SISTEMA` adm
 mvn test
 ```
 
-Incluye pruebas unitarias de la regla de habilitación (`EvaluadorHabilitacionTest`).
+Incluye pruebas unitarias de:
+- habilitación (RN-05 / RN-04): `EvaluadorHabilitacionTest`
+- cupo y lista de espera (RN-13): `CupoServiceTest`
 
 ## Documentación de la API
 

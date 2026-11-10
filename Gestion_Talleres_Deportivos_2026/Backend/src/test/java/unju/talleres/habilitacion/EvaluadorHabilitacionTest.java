@@ -120,4 +120,29 @@ class EvaluadorHabilitacionTest {
         assertThat(ev.estado()).isEqualTo(EstadoHabilitacion.PENDIENTE);
         assertThat(ev.documentacionCompleta()).isFalse();
     }
+
+    @Test
+    void noHabilitadoCuandoLaConstanciaEstaVencida() {
+        Evaluacion ev = EvaluadorHabilitacion.evaluar(List.of(constancia),
+                List.of(constancia(HOY.minusDays(1))),
+                List.of(seguro(HOY.minusMonths(1), HOY.plusMonths(11))),
+                List.of(apto(HOY.minusMonths(1))), HOY);
+
+        assertThat(ev.estado()).isEqualTo(EstadoHabilitacion.NO_HABILITADO);
+        assertThat(ev.documentacionCompleta()).isFalse();
+        assertThat(ev.motivos()).isNotEmpty();
+    }
+
+    @Test
+    void usaElSeguroVigenteAunqueHayaUnoVencidoAnterior() {
+        Evaluacion ev = EvaluadorHabilitacion.evaluar(List.of(constancia),
+                List.of(constancia(HOY.plusMonths(3))),
+                List.of(
+                        seguro(HOY.minusYears(2), HOY.minusYears(1)),
+                        seguro(HOY.minusMonths(1), HOY.plusMonths(11))),
+                List.of(apto(HOY.minusMonths(2))), HOY);
+
+        assertThat(ev.seguro()).isEqualTo(Situacion.CUMPLE);
+        assertThat(ev.estado()).isEqualTo(EstadoHabilitacion.HABILITADO);
+    }
 }
