@@ -46,10 +46,9 @@ Incluye portal público, API REST con JWT y roles, gestión interna (participant
 
 En el plan gratuito de Render el backend puede tardar en responder la primera vez (cold start).
 
-### Credenciales de demostración
+### Acceso para la corrección
 
-- Administrador del sistema: `admin` / `Admin2026!` (siempre disponible).
-- Usuarios de demo (`coordinador`, `administrativo`, `ingreso`, `profesor1`, etc.): contraseña `Demo2026!`, solo si el backend corre con el perfil `demo`.
+Las credenciales del sistema desplegado no se publican en este repositorio. El acceso para la corrección se envía a la tutora por mensaje privado.
 
 ## Cómo ejecutarlo en local
 
@@ -89,22 +88,24 @@ Abrir `http://localhost:5173` (portal) o `http://localhost:5173/admin` (gestión
 
 Los valores reales no se suben al repositorio. Las plantillas están en:
 
-- `Backend/.env.example`
-- `Frontend/.env.example`
+- [`Backend/.env.example`](Gestion_Talleres_Deportivos_2026/Backend/.env.example)
+- [`Frontend/.env.example`](Gestion_Talleres_Deportivos_2026/Frontend/.env.example)
+
+**Seguridad:** en Render tiene que estar definida la variable `JWT_SECRET` con un valor propio de al menos 32 caracteres. Si falta, el backend usa el valor por defecto de `application.yml`, que es público.
 
 En local, el frontend usa por defecto `http://localhost:8080`. En Vercel, `VITE_API_URL` debe apuntar a `https://unju-deportes-backend.onrender.com` (sin `/api` ni barra final). En Render, `FRONTEND_URL` debe listar los orígenes de Vercel separados por coma.
 
-Detalle de endpoints: `Backend/API.md`.
+Detalle de endpoints: [`Backend/API.md`](Gestion_Talleres_Deportivos_2026/Backend/API.md).
 
 ## Pruebas automatizadas
 
-En `Backend/`:
+En `Gestion_Talleres_Deportivos_2026/Backend/`:
 
 ```bash
 mvn test
 ```
 
-Cubren reglas críticas: habilitación (RN-04/05), cupo y lista de espera (RN-13), control de ingreso (RN-06/07) y seguro por período (RN-02). Detalle de clases y casos en `Backend/README.md`.
+Cubren reglas críticas: habilitación (RN-04/05), cupo y lista de espera (RN-13), control de ingreso (RN-06/07) y seguro por período (RN-02). Detalle de clases y casos en [`Backend/README.md`](Gestion_Talleres_Deportivos_2026/Backend/README.md).
 
 ## Módulos implementados
 
@@ -136,20 +137,20 @@ Cubren reglas críticas: habilitación (RN-04/05), cupo y lista de espera (RN-13
 
 ## Base de datos
 
-PostgreSQL. El esquema se crea con Flyway (`Backend/src/main/resources/db/migration/`). El perfil `demo` carga datos de ejemplo (`db/demo/`).
+PostgreSQL. El esquema se crea con Flyway ([`Backend/src/main/resources/db/migration/`](Gestion_Talleres_Deportivos_2026/Backend/src/main/resources/db/migration)). El perfil `demo` carga datos de ejemplo ([`db/demo/`](Gestion_Talleres_Deportivos_2026/Backend/src/main/resources/db/demo)).
 
-Modelo entidad-relación: `Database/der.mmd` y `Database/der.png`. Diccionario de datos en el documento de la 2.ª entrega.
+Modelo entidad-relación: [`Database/der.mmd`](Gestion_Talleres_Deportivos_2026/Database/der.mmd) y [`Database/der.png`](Gestion_Talleres_Deportivos_2026/Database/der.png). Diccionario de datos en el documento de la 2.ª entrega.
 
 ## Documentación
 
 | Recurso | Ubicación |
 | --- | --- |
-| 1.ª entrega (definición del problema) | `Documentos/1-Definicion-del-Problema/` |
-| 2.ª entrega (diseño y módulos) | `Documentos/2-Diseno-y-Modulos/` |
-| Modelo de datos | `Database/` |
-| Backend | `Backend/README.md`, `Backend/API.md` |
-| Frontend | `Frontend/README.md` |
-| Informe Final (PDF) | Pendiente de incorporar al repositorio |
+| 1.ª entrega (definición del problema) | [`Documentos/1-Definicion-del-Problema/`](Gestion_Talleres_Deportivos_2026/Documentos/1-Definicion-del-Problema) |
+| 2.ª entrega (diseño y módulos) | [`Documentos/2-Diseno-y-Modulos/`](Gestion_Talleres_Deportivos_2026/Documentos/2-Diseno-y-Modulos) |
+| Modelo de datos | [`Database/`](Gestion_Talleres_Deportivos_2026/Database) |
+| Backend | [`Backend/README.md`](Gestion_Talleres_Deportivos_2026/Backend/README.md), [`Backend/API.md`](Gestion_Talleres_Deportivos_2026/Backend/API.md) |
+| Frontend | [`Frontend/README.md`](Gestion_Talleres_Deportivos_2026/Frontend/README.md) |
+| Informe Final (PDF) | [`Informe_Final_TFI.pdf`](Gestion_Talleres_Deportivos_2026/Documentos/3-Informe-Final/Informe_Final_TFI.pdf) |
 | Video de presentación | Pendiente de incorporar; el enlace irá aquí y en el PDF |
 
 ## Limitaciones conocidas
@@ -158,14 +159,17 @@ Modelo entidad-relación: `Database/der.mmd` y `Database/der.png`. Diccionario d
 - La campana del header muestra alertas activas para roles de gestión (`ADMINISTRATIVO` / `COORDINADOR`).
 - Hay pruebas unitarias de habilitación, cupo/lista de espera, ingreso y seguro (`mvn test` en `Backend/`); no automatizan toda la API ni la UI.
 - En Render (plan gratuito) el backend puede demorar la primera respuesta tras un período de inactividad.
+- **Archivos subidos:** los documentos, fotos y aptos médicos se guardan en el disco del servidor. En el plan gratuito de Render ese disco se borra cada vez que el servicio se reinicia o se redespliega. Como trabajo futuro se propone usar un almacenamiento externo.
 - El portal público muestra las noticias; administrativos y coordinadores las administran desde el menú Noticias.
 
 ## Estructura del repositorio
 
 ```
-Gestion_Talleres_Deportivos_2026/
-├── Backend/       # API Java + Spring Boot
-├── Frontend/      # React + TypeScript
-├── Database/      # DER y documentación del modelo
-└── Documentos/    # Entregas académicas 1 y 2
+.
+├── README.md
+└── Gestion_Talleres_Deportivos_2026/
+    ├── Backend/       # API Java + Spring Boot
+    ├── Frontend/      # React + TypeScript
+    ├── Database/      # DER y documentación del modelo
+    └── Documentos/    # Entregas 1 y 2 e Informe Final
 ```

@@ -26,7 +26,7 @@ docker compose up -d
 mvn spring-boot:run "-Dspring-boot.run.profiles=demo"
 ```
 
-Sin el perfil `demo` solo queda el usuario inicial de migraciones (`admin` / `Admin2026!`). Con `demo` se cargan talleres de ejemplo y usuarios adicionales (`Demo2026!`). Detalle en `API.md`.
+Sin el perfil `demo` solo queda el usuario inicial `admin` creado por las migraciones. Su contraseña inicial no se publica; en cualquier despliegue hay que cambiarla en el primer ingreso (menú **Mi perfil**). Con `demo` se cargan talleres de ejemplo y usuarios de prueba sin permisos de administración (`Demo2026!`). Detalle en `API.md`.
 
 ## Variables de entorno
 
@@ -36,10 +36,10 @@ Plantilla: `.env.example`. No subir valores reales al repositorio.
 | --- | --- |
 | `PORT` | Puerto HTTP (Render lo asigna) |
 | `DB_URL`, `DB_USER`, `DB_PASSWORD` | Conexión PostgreSQL |
-| `JWT_SECRET` | Secreto de firma del token (mín. 32 caracteres) |
+| `JWT_SECRET` | Secreto de firma del token (mín. 32 caracteres). **Obligatoria en producción:** si falta, se usa el valor por defecto publicado en `application.yml`. |
 | `FRONTEND_URL` | Orígenes CORS separados por coma (URLs de Vercel y localhost) |
 | `SPRING_PROFILES_ACTIVE` | `demo` para datos de ejemplo |
-| `UPLOAD_DIR` | Carpeta de archivos subidos |
+| `UPLOAD_DIR` | Carpeta de archivos subidos. En el plan gratuito de Render el disco es temporal y se borra en cada reinicio o redeploy. |
 | `APP_ZONA_HORARIA` | Zona horaria de la aplicación |
 
 ## Organización por módulos

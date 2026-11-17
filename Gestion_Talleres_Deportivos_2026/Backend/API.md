@@ -10,7 +10,7 @@ Contrato de la API REST del backend (Spring Boot). La documentación interactiva
 
 ```http
 POST /api/auth/login
-{ "nombreUsuario": "admin", "password": "Admin2026!" }
+{ "nombreUsuario": "coordinador", "password": "<contraseña>" }
 ```
 
 ```json
@@ -18,13 +18,13 @@ POST /api/auth/login
   "token": "eyJhbGciOiJIUzI1NiJ9...",
   "tipo": "Bearer",
   "expiraEnSegundos": 28800,
-  "usuario": { "id": 1, "nombreUsuario": "admin", "nombre": "Administrador", "apellido": "del Sistema", "rol": "ADMIN_SISTEMA", "estado": "ACTIVO" }
+  "usuario": { "id": 2, "nombreUsuario": "coordinador", "nombre": "Carla", "apellido": "Coordinadora", "rol": "COORDINADOR", "estado": "ACTIVO" }
 }
 ```
 
 En cada request al sistema interno se envía el header `Authorization: Bearer <token>`. Con `GET /api/auth/me` se recupera el usuario al recargar la página. El rol (`usuario.rol`) sirve para armar el menú.
 
-**Usuarios de prueba** (perfil `demo`, contraseña `Demo2026!`): `coordinador`, `administrativo`, `ingreso`, `profesor1`, `ayudante1`, `autoridad`. Además siempre existe `admin` / `Admin2026!`.
+**Usuarios de prueba** (perfil `demo`, contraseña `Demo2026!`): `coordinador`, `administrativo`, `ingreso`, `profesor1`, `ayudante1`, `autoridad`. Además existe el usuario `admin` (`ADMIN_SISTEMA`) creado por las migraciones; su contraseña no se publica y debe cambiarse en el primer ingreso.
 
 ## 2. Errores
 

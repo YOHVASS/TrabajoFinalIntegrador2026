@@ -4,6 +4,10 @@ Motor: **PostgreSQL**. Claves primarias BIGINT autoincrementales en todas las ta
 
 ## Contenido de esta carpeta
 
+> Los scripts SQL de la base **no están en esta carpeta**: los ejecuta Flyway desde el backend.
+> - Esquema y datos iniciales: [`Backend/src/main/resources/db/migration/`](../Backend/src/main/resources/db/migration)
+> - Datos de ejemplo (perfil `demo`): [`Backend/src/main/resources/db/demo/`](../Backend/src/main/resources/db/demo)
+
 - `der.mmd` — código fuente (Mermaid) del modelo entidad-relación.
 - `der.png` — imagen exportada del DER, la misma que figura en la documentación de la Etapa 2.
 

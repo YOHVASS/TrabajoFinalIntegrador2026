@@ -78,8 +78,23 @@ function Noticias() {
         }
     }
 
+    // Carga inicial: el setState queda dentro de los callbacks de la promesa
+    // (regla react-hooks/set-state-in-effect).
     useEffect(() => {
-        void cargar();
+        let activo = true;
+        api<PaginaResponse<Noticia>>("/noticias?pagina=0&tamanio=50")
+            .then((pagina) => {
+                if (activo) setNoticias(pagina.contenido);
+            })
+            .catch((err) => {
+                if (activo) setError(mensajeError(err));
+            })
+            .finally(() => {
+                if (activo) setCargando(false);
+            });
+        return () => {
+            activo = false;
+        };
     }, []);
 
     async function crear(e: FormEvent) {

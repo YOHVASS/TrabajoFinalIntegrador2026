@@ -231,6 +231,8 @@ function App() {
         setAutenticado(false);
         setPerfilAbierto(false);
         setAlertasAbiertas(false);
+        setAlertasActivasCount(0);
+        setAlertasLista([]);
     }
 
     const [resumen, setResumen] = useState<ResumenPanel | null>(null);
@@ -244,9 +246,9 @@ function App() {
         rolUsuario === "ADMINISTRATIVO" || rolUsuario === "COORDINADOR";
 
     useEffect(() => {
+        // El contador y la lista se limpian al cerrar sesión (cerrarSesion),
+        // no acá: setState sincrónico dentro del efecto lo marca el linter.
         if (!autenticado || !puedeVerAlertas) {
-            setAlertasActivasCount(0);
-            setAlertasLista([]);
             return;
         }
 

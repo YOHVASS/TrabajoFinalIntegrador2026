@@ -96,8 +96,23 @@ function Usuarios() {
         }
     }
 
+    // Carga inicial: el setState queda dentro de los callbacks de la promesa
+    // (regla react-hooks/set-state-in-effect).
     useEffect(() => {
-        void cargar();
+        let activo = true;
+        api<Usuario[]>("/usuarios")
+            .then((datos) => {
+                if (activo) setUsuarios(datos);
+            })
+            .catch((err) => {
+                if (activo) setError(mensajeError(err));
+            })
+            .finally(() => {
+                if (activo) setCargando(false);
+            });
+        return () => {
+            activo = false;
+        };
     }, []);
 
     async function crear(e: FormEvent) {
