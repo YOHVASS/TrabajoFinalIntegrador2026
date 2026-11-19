@@ -7,7 +7,7 @@ Informe final del Trabajo Final Integrador. Grupo 182.
 | Archivo | Descripción |
 | --- | --- |
 | `Informe_Final_TFI.pdf` | Informe final en PDF (versión de entrega) |
-| `Informe_Final_TFI.docx` | Versión editable del informe |
+| `Informe_Final_TF.docx` | Versión editable del informe |
 
 ## Secciones del informe
 
