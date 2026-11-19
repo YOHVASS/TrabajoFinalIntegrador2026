@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import {
     Search,
@@ -10,13 +9,34 @@ import {
     Download,
     X,
 } from "lucide-react";
-
+import { QRCodeCanvas } from "qrcode.react";
 import { api } from "./services/api";
 import type { Participante, PaginaResponse } from "./types";
-import { QRCodeCanvas } from "qrcode.react";
+
+type InscripcionParticipante = {
+    estado: string;
+    taller: string;
+};
+
+async function consultarTalleres(id: number): Promise<[number, string]> {
+    try {
+        const inscripciones = await api<InscripcionParticipante[]>(
+            `/participantes/${id}/inscripciones`
+        );
+
+        const talleresActivos = inscripciones
+            .filter((inscripcion) => inscripcion.estado === "ACTIVA")
+            .map((inscripcion) => inscripcion.taller);
+
+        return [id, talleresActivos.join(", ") || "Sin inscripción activa"];
+    } catch {
+        return [id, "Consulta no disponible"];
+    }
+}
 
 function Participantes() {
     const [participantes, setParticipantes] = useState<Participante[]>([]);
+    const [talleres, setTalleres] = useState<Record<number, string>>({});
     const [busqueda, setBusqueda] = useState("");
     const [filtro, setFiltro] = useState("TODOS");
     const [cargando, setCargando] = useState(true);
@@ -25,41 +45,48 @@ function Participantes() {
         useState<Participante | null>(null);
 
     useEffect(() => {
+        let vigente = true;
+
         async function cargarParticipantes() {
             try {
-                setCargando(true);
-                setError("");
-
                 const respuesta = await api<PaginaResponse<Participante>>(
                     "/participantes"
                 );
 
+                if (!vigente) return;
                 setParticipantes(respuesta.contenido);
+                setCargando(false);
+
+                const resultados = await Promise.all(
+                    respuesta.contenido.map((persona) => consultarTalleres(persona.id))
+                );
+
+                if (vigente) setTalleres(Object.fromEntries(resultados));
             } catch (err) {
+                if (!vigente) return;
                 setError(
                     err instanceof Error
                         ? err.message
                         : "No se pudieron cargar los participantes."
                 );
-            } finally {
                 setCargando(false);
             }
         }
 
         cargarParticipantes();
+        return () => {
+            vigente = false;
+        };
     }, []);
 
     const filtrados = participantes.filter((persona) => {
         const nombreCompleto = `${persona.nombre} ${persona.apellido}`;
-
         const coincideBusqueda =
             nombreCompleto.toLowerCase().includes(busqueda.toLowerCase()) ||
             persona.dni.includes(busqueda) ||
             String(persona.id).includes(busqueda);
-
         const coincideEstado =
             filtro === "TODOS" || persona.estadoHabilitacion === filtro;
-
         return coincideBusqueda && coincideEstado;
     });
 
@@ -69,25 +96,13 @@ function Participantes() {
 
     const exportarCSV = () => {
         const encabezados = [
-            "ID",
-            "Nombre",
-            "Apellido",
-            "DNI",
-            "Facultad",
-            "Email",
-            "Telefono",
-            "Estado",
+            "ID", "Nombre", "Apellido", "DNI", "Facultad",
+            "Email", "Telefono", "Estado",
         ];
 
         const filas = filtrados.map((p) => [
-            p.id,
-            p.nombre,
-            p.apellido,
-            p.dni,
-            p.facultad,
-            p.email,
-            p.telefono,
-            p.estadoHabilitacion,
+            p.id, p.nombre, p.apellido, p.dni, p.facultad,
+            p.email, p.telefono, p.estadoHabilitacion,
         ]);
 
         const contenido = [encabezados, ...filas]
@@ -101,7 +116,6 @@ function Participantes() {
         const archivo = new Blob(["\uFEFF" + contenido], {
             type: "text/csv;charset=utf-8;",
         });
-
         const url = URL.createObjectURL(archivo);
         const enlace = document.createElement("a");
         enlace.href = url;
@@ -112,12 +126,8 @@ function Participantes() {
 
     const formatoFecha = (fecha: string) => {
         if (!fecha) return "No informada";
-
-        const fechaCorta = fecha.substring(0, 10);
-        const [anio, mes, dia] = fechaCorta.split("-");
-
+        const [anio, mes, dia] = fecha.substring(0, 10).split("-");
         if (!anio || !mes || !dia) return "No informada";
-
         return `${dia}/${mes}/${anio}`;
     };
 
@@ -125,12 +135,10 @@ function Participantes() {
         const canvas = document.querySelector<HTMLCanvasElement>(
             "#qr-participante canvas"
         );
-
         if (!canvas) {
             alert("No se pudo generar el código QR.");
             return;
         }
-
         const enlace = document.createElement("a");
         enlace.href = canvas.toDataURL("image/png");
         enlace.download = `credencial-qr-${participanteSeleccionado?.dni || "participante"}.png`;
@@ -162,7 +170,6 @@ function Participantes() {
                         deportivos.
                     </p>
                 </div>
-
                 <button className="primary-button" type="button">
                     <UserPlus size={18} />
                     Nuevo participante
@@ -185,7 +192,6 @@ function Participantes() {
                         <h2>Listado de participantes</h2>
                         <p>Consultá la información y el estado de habilitación.</p>
                     </div>
-
                     <button
                         className="secondary-button"
                         type="button"
@@ -224,78 +230,73 @@ function Participantes() {
                 <div className="participants-table-wrapper">
                     <table className="participants-table">
                         <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>PARTICIPANTE</th>
-                            <th>DNI</th>
-                            <th>FACULTAD</th>
-                            <th>HABILITACIÓN</th>
-                            <th>ACCIÓN</th>
-                        </tr>
+                            <tr>
+                                <th>ID</th>
+                                <th>PARTICIPANTE</th>
+                                <th>DNI</th>
+                                <th>FACULTAD</th>
+                                <th>TALLERES CON INSCRIPCIÓN ACTIVA</th>
+                                <th>HABILITACIÓN</th>
+                                <th>ACCIÓN</th>
+                            </tr>
                         </thead>
-
                         <tbody>
-                        {cargando ? (
-                            <tr>
-                                <td colSpan={6} className="empty-results">
-                                    Cargando participantes...
-                                </td>
-                            </tr>
-                        ) : error ? (
-                            <tr>
-                                <td colSpan={6} className="empty-results">
-                                    {error}
-                                </td>
-                            </tr>
-                        ) : filtrados.length === 0 ? (
-                            <tr>
-                                <td colSpan={6} className="empty-results">
-                                    No se encontraron participantes.
-                                </td>
-                            </tr>
-                        ) : (
-                            filtrados.map((persona) => (
-                                <tr key={persona.id}>
-                                    <td>{persona.id}</td>
-
-                                    <td>
-                                        <div className="participant-name">
-                                            <div className="participant-avatar">
-                                                {persona.nombre[0]}
-                                                {persona.apellido[0]}
-                                            </div>
-                                            <strong>
-                                                {persona.nombre} {persona.apellido}
-                                            </strong>
-                                        </div>
+                            {cargando ? (
+                                <tr>
+                                    <td colSpan={7} className="empty-results">
+                                        Cargando participantes...
                                     </td>
-
-                                    <td>{persona.dni}</td>
-                                    <td>{persona.facultad || "Sin facultad"}</td>
-
-                                    <td>
+                                </tr>
+                            ) : error ? (
+                                <tr>
+                                    <td colSpan={7} className="empty-results">
+                                        {error}
+                                    </td>
+                                </tr>
+                            ) : filtrados.length === 0 ? (
+                                <tr>
+                                    <td colSpan={7} className="empty-results">
+                                        No se encontraron participantes.
+                                    </td>
+                                </tr>
+                            ) : (
+                                filtrados.map((persona) => (
+                                    <tr key={persona.id}>
+                                        <td>{persona.id}</td>
+                                        <td>
+                                            <div className="participant-name">
+                                                <div className="participant-avatar">
+                                                    {persona.nombre[0]}
+                                                    {persona.apellido[0]}
+                                                </div>
+                                                <strong>
+                                                    {persona.nombre} {persona.apellido}
+                                                </strong>
+                                            </div>
+                                        </td>
+                                        <td>{persona.dni}</td>
+                                        <td>{persona.facultad || "Sin facultad"}</td>
+                                        <td>{talleres[persona.id] ?? "Consultando…"}</td>
+                                        <td>
                                             <span
                                                 className={`participant-status ${claseEstado(persona.estadoHabilitacion)}`}
                                             >
                                                 {textoEstado(persona.estadoHabilitacion)}
                                             </span>
-                                    </td>
-
-                                    <td>
-                                        <button
-                                            className="view-button"
-                                            title="Ver participante"
-                                            type="button"
-                                            onClick={() =>
-                                                setParticipanteSeleccionado(persona)
-                                            }
-                                        >
-                                            <Eye size={17} />
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
+                                        </td>
+                                        <td>
+                                            <button
+                                                className="view-button"
+                                                title="Ver participante"
+                                                type="button"
+                                                onClick={() => setParticipanteSeleccionado(persona)}
+                                            >
+                                                <Eye size={17} />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
                         </tbody>
                     </table>
                 </div>
@@ -326,7 +327,6 @@ function Participantes() {
                                 </h2>
                                 <p>ID interno: {participanteSeleccionado.id}</p>
                             </div>
-
                             <button
                                 type="button"
                                 className="participant-modal-close"
@@ -342,47 +342,40 @@ function Participantes() {
                                 <span>DNI</span>
                                 <strong>{participanteSeleccionado.dni}</strong>
                             </div>
-
                             <div className="participant-detail">
                                 <span>Facultad</span>
                                 <strong>
                                     {participanteSeleccionado.facultad || "Sin facultad"}
                                 </strong>
                             </div>
-
                             <div className="participant-detail">
                                 <span>Fecha de nacimiento</span>
                                 <strong>
                                     {formatoFecha(participanteSeleccionado.fechaNacimiento)}
                                 </strong>
                             </div>
-
                             <div className="participant-detail">
                                 <span>Sexo</span>
                                 <strong>{participanteSeleccionado.sexo}</strong>
                             </div>
-
                             <div className="participant-detail">
                                 <span>Correo electrónico</span>
                                 <strong>
                                     {participanteSeleccionado.email || "No informado"}
                                 </strong>
                             </div>
-
                             <div className="participant-detail">
                                 <span>Teléfono</span>
                                 <strong>
                                     {participanteSeleccionado.telefono || "No informado"}
                                 </strong>
                             </div>
-
                             <div className="participant-detail">
                                 <span>Fecha de alta</span>
                                 <strong>
                                     {formatoFecha(participanteSeleccionado.fechaAlta)}
                                 </strong>
                             </div>
-
                             <div className="participant-detail">
                                 <span>Estado de habilitación</span>
                                 <strong
@@ -394,7 +387,6 @@ function Participantes() {
 
                             <div className="participant-detail participant-detail-full participant-qr-card">
                                 <span>Credencial QR</span>
-
                                 {participanteSeleccionado.qrCode ? (
                                     <>
                                         <div id="qr-participante" className="participant-qr-image">
@@ -405,12 +397,10 @@ function Participantes() {
                                                 includeMargin={true}
                                             />
                                         </div>
-
                                         <small>
                                             Código personal de {participanteSeleccionado.nombre}{" "}
                                             {participanteSeleccionado.apellido}
                                         </small>
-
                                         <button
                                             type="button"
                                             className="secondary-button"
